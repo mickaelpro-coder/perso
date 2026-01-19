@@ -94,8 +94,25 @@
             box-shadow: 0 0 15px rgba(116, 185, 255, 0.5);
         }
 
-        .parent-select {
+        .relation-section {
             grid-column: 1 / -1;
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        .relation-title {
+            color: #6c5ce7;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .relation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
         }
 
         .btn {
@@ -150,7 +167,8 @@
             border-radius: 20px;
             padding: 20px;
             text-align: center;
-            min-width: 180px;
+            min-width: 200px;
+            max-width: 250px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
             position: relative;
@@ -186,12 +204,31 @@
             font-size: 0.9em;
         }
 
-        .person-parent {
-            color: #6c5ce7;
-            font-size: 0.85em;
-            margin-top: 5px;
-            font-style: italic;
+        .person-relations {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px dashed #dfe6e9;
         }
+
+        .relation-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            margin: 3px;
+            color: white;
+        }
+
+        .relation-tag.pere, .relation-tag.mere { background: #e17055; }
+        .relation-tag.fils, .relation-tag.fille { background: #00b894; }
+        .relation-tag.frere, .relation-tag.soeur { background: #0984e3; }
+        .relation-tag.conjoint { background: #e84393; }
+        .relation-tag.beau-pere, .relation-tag.belle-mere { background: #6c5ce7; }
+        .relation-tag.demi-frere, .relation-tag.demi-soeur { background: #00cec9; }
+        .relation-tag.oncle, .relation-tag.tante { background: #fdcb6e; color: #2d3436; }
+        .relation-tag.cousin, .relation-tag.cousine { background: #81ecec; color: #2d3436; }
+        .relation-tag.grand-pere, .relation-tag.grand-mere { background: #fab1a0; color: #2d3436; }
+        .relation-tag.petit-fils, .relation-tag.petite-fille { background: #a29bfe; }
 
         .delete-btn {
             position: absolute;
@@ -282,6 +319,10 @@
                 grid-template-columns: 1fr;
             }
 
+            .relation-grid {
+                grid-template-columns: 1fr;
+            }
+
             .person-card {
                 min-width: 150px;
             }
@@ -320,12 +361,57 @@
                             <option value="F">Fille</option>
                         </select>
                     </div>
-                    <div class="form-group parent-select">
-                        <label for="parentId">Parent (optionnel)</label>
-                        <select id="parentId" name="parentId">
-                            <option value="">Aucun parent sélectionné</option>
-                        </select>
+
+                    <!-- Section des liens familiaux -->
+                    <div class="relation-section">
+                        <div class="relation-title">Lien avec un membre existant (optionnel)</div>
+                        <div class="relation-grid">
+                            <div class="form-group">
+                                <label for="relatedPerson">Personne liée</label>
+                                <select id="relatedPerson" name="relatedPerson">
+                                    <option value="">Aucune personne</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="relationType">Type de lien</label>
+                                <select id="relationType" name="relationType">
+                                    <option value="">Choisir le lien...</option>
+                                    <optgroup label="Parents">
+                                        <option value="pere">Est le père de</option>
+                                        <option value="mere">Est la mère de</option>
+                                        <option value="beau-pere">Est le beau-père de</option>
+                                        <option value="belle-mere">Est la belle-mère de</option>
+                                    </optgroup>
+                                    <optgroup label="Enfants">
+                                        <option value="fils">Est le fils de</option>
+                                        <option value="fille">Est la fille de</option>
+                                    </optgroup>
+                                    <optgroup label="Frères et Sœurs">
+                                        <option value="frere">Est le frère de</option>
+                                        <option value="soeur">Est la sœur de</option>
+                                        <option value="demi-frere">Est le demi-frère de</option>
+                                        <option value="demi-soeur">Est la demi-sœur de</option>
+                                    </optgroup>
+                                    <optgroup label="Conjoint">
+                                        <option value="conjoint">Est le/la conjoint(e) de</option>
+                                    </optgroup>
+                                    <optgroup label="Grands-parents">
+                                        <option value="grand-pere">Est le grand-père de</option>
+                                        <option value="grand-mere">Est la grand-mère de</option>
+                                        <option value="petit-fils">Est le petit-fils de</option>
+                                        <option value="petite-fille">Est la petite-fille de</option>
+                                    </optgroup>
+                                    <optgroup label="Oncles/Tantes/Cousins">
+                                        <option value="oncle">Est l'oncle de</option>
+                                        <option value="tante">Est la tante de</option>
+                                        <option value="cousin">Est le cousin de</option>
+                                        <option value="cousine">Est la cousine de</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="btn-container">
                         <button type="submit" class="btn">Ajouter à la famille</button>
                     </div>
@@ -354,6 +440,53 @@
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let familyMembers = [];
+        let familyRelations = [];
+
+        // Types de relations et leurs inverses
+        const relationInverses = {
+            'pere': 'fils/fille',
+            'mere': 'fils/fille',
+            'fils': 'pere/mere',
+            'fille': 'pere/mere',
+            'frere': 'frere/soeur',
+            'soeur': 'frere/soeur',
+            'demi-frere': 'demi-frere/demi-soeur',
+            'demi-soeur': 'demi-frere/demi-soeur',
+            'conjoint': 'conjoint',
+            'beau-pere': 'beau-fils/belle-fille',
+            'belle-mere': 'beau-fils/belle-fille',
+            'grand-pere': 'petit-fils/petite-fille',
+            'grand-mere': 'petit-fils/petite-fille',
+            'petit-fils': 'grand-pere/grand-mere',
+            'petite-fille': 'grand-pere/grand-mere',
+            'oncle': 'neveu/niece',
+            'tante': 'neveu/niece',
+            'cousin': 'cousin/cousine',
+            'cousine': 'cousin/cousine'
+        };
+
+        // Labels pour l'affichage
+        const relationLabels = {
+            'pere': 'Père',
+            'mere': 'Mère',
+            'fils': 'Fils',
+            'fille': 'Fille',
+            'frere': 'Frère',
+            'soeur': 'Sœur',
+            'demi-frere': 'Demi-frère',
+            'demi-soeur': 'Demi-sœur',
+            'conjoint': 'Conjoint(e)',
+            'beau-pere': 'Beau-père',
+            'belle-mere': 'Belle-mère',
+            'grand-pere': 'Grand-père',
+            'grand-mere': 'Grand-mère',
+            'petit-fils': 'Petit-fils',
+            'petite-fille': 'Petite-fille',
+            'oncle': 'Oncle',
+            'tante': 'Tante',
+            'cousin': 'Cousin',
+            'cousine': 'Cousine'
+        };
 
         // Afficher un message
         function showMessage(text, type) {
@@ -398,41 +531,107 @@
             }
         }
 
-        // Trouver le nom du parent
-        function getParentName(parentId) {
-            const parent = familyMembers.find(m => m.id === parentId);
-            return parent ? `${parent.prenom} ${parent.nom}` : null;
+        // Trouver le nom d'un membre
+        function getMemberName(memberId) {
+            const member = familyMembers.find(m => m.id === memberId);
+            return member ? `${member.prenom}` : null;
+        }
+
+        // Obtenir les relations d'un membre
+        function getMemberRelations(memberId) {
+            const relations = [];
+
+            familyRelations.forEach(rel => {
+                if (rel.member_id === memberId) {
+                    const relatedName = getMemberName(rel.related_member_id);
+                    if (relatedName) {
+                        relations.push({
+                            type: rel.relation_type,
+                            name: relatedName
+                        });
+                    }
+                } else if (rel.related_member_id === memberId) {
+                    const relatedName = getMemberName(rel.member_id);
+                    if (relatedName) {
+                        // Calculer la relation inverse
+                        const inverseType = getInverseRelation(rel.relation_type, memberId);
+                        relations.push({
+                            type: inverseType,
+                            name: relatedName
+                        });
+                    }
+                }
+            });
+
+            return relations;
+        }
+
+        // Obtenir la relation inverse
+        function getInverseRelation(relationType, memberId) {
+            const member = familyMembers.find(m => m.id === memberId);
+            const sexe = member ? member.sexe : 'M';
+
+            const inverseMap = {
+                'pere': sexe === 'M' ? 'fils' : 'fille',
+                'mere': sexe === 'M' ? 'fils' : 'fille',
+                'fils': sexe === 'M' ? 'pere' : 'mere',
+                'fille': sexe === 'M' ? 'pere' : 'mere',
+                'frere': sexe === 'M' ? 'frere' : 'soeur',
+                'soeur': sexe === 'M' ? 'frere' : 'soeur',
+                'demi-frere': sexe === 'M' ? 'demi-frere' : 'demi-soeur',
+                'demi-soeur': sexe === 'M' ? 'demi-frere' : 'demi-soeur',
+                'conjoint': 'conjoint',
+                'beau-pere': sexe === 'M' ? 'beau-fils' : 'belle-fille',
+                'belle-mere': sexe === 'M' ? 'beau-fils' : 'belle-fille',
+                'grand-pere': sexe === 'M' ? 'petit-fils' : 'petite-fille',
+                'grand-mere': sexe === 'M' ? 'petit-fils' : 'petite-fille',
+                'petit-fils': sexe === 'M' ? 'grand-pere' : 'grand-mere',
+                'petite-fille': sexe === 'M' ? 'grand-pere' : 'grand-mere',
+                'oncle': sexe === 'M' ? 'neveu' : 'niece',
+                'tante': sexe === 'M' ? 'neveu' : 'niece',
+                'cousin': sexe === 'M' ? 'cousin' : 'cousine',
+                'cousine': sexe === 'M' ? 'cousin' : 'cousine'
+            };
+
+            return inverseMap[relationType] || relationType;
         }
 
         // Charger les membres de la famille
         async function loadFamilyMembers() {
             try {
-                const { data, error } = await supabaseClient
-                    .from('family_members')
-                    .select('*')
-                    .order('date_naissance', { ascending: true });
+                const [membersResult, relationsResult] = await Promise.all([
+                    supabaseClient
+                        .from('family_members')
+                        .select('*')
+                        .order('date_naissance', { ascending: true }),
+                    supabaseClient
+                        .from('family_relations')
+                        .select('*')
+                ]);
 
-                if (error) throw error;
+                if (membersResult.error) throw membersResult.error;
 
-                familyMembers = data || [];
+                familyMembers = membersResult.data || [];
+                familyRelations = relationsResult.data || [];
+
                 renderFamilyTree();
-                updateParentSelect();
+                updatePersonSelect();
             } catch (error) {
                 console.error('Erreur lors du chargement:', error);
                 document.getElementById('familyTree').innerHTML = `
                     <div class="no-members">
                         <span>😢</span>
                         <p>Erreur de connexion à la base de données</p>
-                        <p style="font-size: 0.8em; margin-top: 10px;">Vérifiez que la table "family_members" existe</p>
+                        <p style="font-size: 0.8em; margin-top: 10px;">Vérifiez que les tables existent</p>
                     </div>
                 `;
             }
         }
 
-        // Mettre à jour le select des parents
-        function updateParentSelect() {
-            const select = document.getElementById('parentId');
-            select.innerHTML = '<option value="">Aucun parent sélectionné</option>';
+        // Mettre à jour le select des personnes
+        function updatePersonSelect() {
+            const select = document.getElementById('relatedPerson');
+            select.innerHTML = '<option value="">Aucune personne</option>';
 
             familyMembers.forEach(member => {
                 const option = document.createElement('option');
@@ -457,18 +656,29 @@
                 return;
             }
 
-            container.innerHTML = familyMembers.map(member => `
-                <div class="person-card ${member.sexe === 'M' ? 'male' : 'female'}">
-                    <button class="delete-btn" onclick="deleteMember('${member.id}')" title="Supprimer">✕</button>
-                    <div class="person-avatar">${getAvatar(member.sexe, member.date_naissance)}</div>
-                    <div class="person-name">${member.prenom} ${member.nom}</div>
-                    <div class="person-birth">
-                        Né(e) le ${formatDate(member.date_naissance)}<br>
-                        (${calculateAge(member.date_naissance)} ans)
+            container.innerHTML = familyMembers.map(member => {
+                const relations = getMemberRelations(member.id);
+                const relationsHtml = relations.length > 0
+                    ? `<div class="person-relations">
+                        ${relations.map(rel =>
+                            `<span class="relation-tag ${rel.type}">${relationLabels[rel.type] || rel.type} de ${rel.name}</span>`
+                        ).join('')}
+                       </div>`
+                    : '';
+
+                return `
+                    <div class="person-card ${member.sexe === 'M' ? 'male' : 'female'}">
+                        <button class="delete-btn" onclick="deleteMember('${member.id}')" title="Supprimer">✕</button>
+                        <div class="person-avatar">${getAvatar(member.sexe, member.date_naissance)}</div>
+                        <div class="person-name">${member.prenom} ${member.nom}</div>
+                        <div class="person-birth">
+                            Né(e) le ${formatDate(member.date_naissance)}<br>
+                            (${calculateAge(member.date_naissance)} ans)
+                        </div>
+                        ${relationsHtml}
                     </div>
-                    ${member.parent_id ? `<div class="person-parent">Enfant de ${getParentName(member.parent_id)}</div>` : ''}
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         // Ajouter un membre
@@ -480,19 +690,40 @@
                 prenom: form.prenom.value.trim(),
                 nom: form.nom.value.trim(),
                 date_naissance: form.dateNaissance.value,
-                sexe: form.sexe.value,
-                parent_id: form.parentId.value || null
+                sexe: form.sexe.value
             };
 
+            const relatedPersonId = form.relatedPerson.value;
+            const relationType = form.relationType.value;
+
             try {
-                const { data, error } = await supabaseClient
+                // Ajouter le membre
+                const { data: newMember, error: memberError } = await supabaseClient
                     .from('family_members')
                     .insert([memberData])
-                    .select();
+                    .select()
+                    .single();
 
-                if (error) throw error;
+                if (memberError) throw memberError;
 
-                showMessage(`${memberData.prenom} a été ajouté(e) à la famille !`, 'success');
+                // Ajouter la relation si spécifiée
+                if (relatedPersonId && relationType) {
+                    const relationData = {
+                        member_id: newMember.id,
+                        related_member_id: relatedPersonId,
+                        relation_type: relationType
+                    };
+
+                    const { error: relationError } = await supabaseClient
+                        .from('family_relations')
+                        .insert([relationData]);
+
+                    if (relationError) {
+                        console.error('Erreur relation:', relationError);
+                    }
+                }
+
+                showMessage(`${memberData.prenom} a été ajouté(e) à la famille ! 🎉`, 'success');
                 form.reset();
                 await loadFamilyMembers();
             } catch (error) {
@@ -509,6 +740,13 @@
             }
 
             try {
+                // Supprimer d'abord les relations
+                await supabaseClient
+                    .from('family_relations')
+                    .delete()
+                    .or(`member_id.eq.${id},related_member_id.eq.${id}`);
+
+                // Puis supprimer le membre
                 const { error } = await supabaseClient
                     .from('family_members')
                     .delete()
