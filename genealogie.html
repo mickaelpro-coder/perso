@@ -1600,6 +1600,11 @@
 
             familyMembers
                 .filter(m => m.id !== selectedMemberId)
+                .sort((a, b) => {
+                    const nameA = `${a.prenom} ${a.nom}`.toLowerCase();
+                    const nameB = `${b.prenom} ${b.nom}`.toLowerCase();
+                    return nameA.localeCompare(nameB, 'fr');
+                })
                 .forEach(member => {
                     const option = document.createElement('option');
                     option.value = member.id;
@@ -1712,7 +1717,14 @@
             pereSelect.innerHTML = '<option value="">Aucun père</option>';
             mereSelect.innerHTML = '<option value="">Aucune mère</option>';
 
-            familyMembers.forEach(member => {
+            // Trier par ordre alphabétique
+            const sortedMembers = [...familyMembers].sort((a, b) => {
+                const nameA = `${a.prenom} ${a.nom}`.toLowerCase();
+                const nameB = `${b.prenom} ${b.nom}`.toLowerCase();
+                return nameA.localeCompare(nameB, 'fr');
+            });
+
+            sortedMembers.forEach(member => {
                 const option = document.createElement('option');
                 option.value = member.id;
                 option.textContent = `${member.prenom} ${member.nom}`;
