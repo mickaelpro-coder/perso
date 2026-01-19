@@ -799,8 +799,8 @@
                         <input type="text" id="nom" name="nom" placeholder="Ex: Dupont" required>
                     </div>
                     <div class="form-group">
-                        <label for="dateNaissance">Date de naissance</label>
-                        <input type="date" id="dateNaissance" name="dateNaissance" required>
+                        <label for="dateNaissance">Date de naissance (optionnel)</label>
+                        <input type="date" id="dateNaissance" name="dateNaissance">
                     </div>
                     <div class="form-group">
                         <label for="sexe">Sexe</label>
@@ -863,7 +863,7 @@
                             <input type="text" id="editNom" placeholder="Nom">
                         </div>
                         <div class="edit-form-group">
-                            <label for="editDateNaissance">Date de naissance</label>
+                            <label for="editDateNaissance">Date de naissance (optionnel)</label>
                             <input type="date" id="editDateNaissance">
                         </div>
                         <div class="edit-form-group">
@@ -943,6 +943,7 @@
 
         // Calculer l'âge
         function calculateAge(birthDate) {
+            if (!birthDate) return null;
             const today = new Date();
             const birth = new Date(birthDate);
             let age = today.getFullYear() - birth.getFullYear();
@@ -955,11 +956,13 @@
         function getAvatar(sexe, birthDate) {
             const age = calculateAge(birthDate);
             if (sexe === 'M') {
+                if (age === null) return '👤';
                 if (age < 12) return '👦';
                 if (age < 20) return '🧑';
                 if (age < 60) return '👨';
                 return '👴';
             } else {
+                if (age === null) return '👤';
                 if (age < 12) return '👧';
                 if (age < 20) return '👩';
                 if (age < 60) return '👩';
@@ -1138,13 +1141,14 @@
         // Créer une carte de personne
         function createPersonCard(member, relationLabel = null, isCenter = false) {
             const age = calculateAge(member.date_naissance);
+            const ageDisplay = age !== null ? `${age} ans` : '';
             return `
                 <div class="person-card ${member.sexe === 'M' ? 'male' : 'female'} ${isCenter ? 'center' : ''}"
                      onclick="selectMember('${member.id}')" data-id="${member.id}">
                     <button class="delete-btn" onclick="event.stopPropagation(); deleteMember('${member.id}')" title="Supprimer">✕</button>
                     <div class="person-avatar">${getAvatar(member.sexe, member.date_naissance)}</div>
                     <div class="person-name">${member.prenom}</div>
-                    <div class="person-birth">${age} ans</div>
+                    ${ageDisplay ? `<div class="person-birth">${ageDisplay}</div>` : ''}
                     ${relationLabel ? `<div class="person-relation-label">${relationLabel}</div>` : ''}
                 </div>
             `;
@@ -1373,11 +1377,11 @@
 
             const prenom = document.getElementById('editPrenom').value.trim();
             const nom = document.getElementById('editNom').value.trim();
-            const dateNaissance = document.getElementById('editDateNaissance').value;
+            const dateNaissance = document.getElementById('editDateNaissance').value || null;
             const sexe = document.getElementById('editSexe').value;
 
-            if (!prenom || !nom || !dateNaissance || !sexe) {
-                showMessage('Remplis tous les champs', 'error');
+            if (!prenom || !nom || !sexe) {
+                showMessage('Remplis au moins le prénom, le nom et le sexe', 'error');
                 return;
             }
 
