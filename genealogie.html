@@ -512,6 +512,56 @@
             font-style: italic;
         }
 
+        /* Formulaire d'ajout de lien */
+        .add-relation-form {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px dashed #ffcc80;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .add-relation-form select {
+            padding: 10px;
+            border: 2px solid #ffcc80;
+            border-radius: 12px;
+            font-size: 0.9em;
+            font-family: inherit;
+            min-width: 150px;
+        }
+
+        .add-relation-form select:focus {
+            outline: none;
+            border-color: #ff9800;
+        }
+
+        .btn-add-relation {
+            background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.9em;
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add-relation:hover {
+            transform: scale(1.05);
+            box-shadow: 0 3px 10px rgba(67, 160, 71, 0.4);
+        }
+
+        .btn-add-relation:disabled {
+            background: #bdbdbd;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
         /* Messages */
         .message {
             padding: 15px 25px;
@@ -704,6 +754,49 @@
             <div id="relationsManager" class="relations-manager" style="display: none;">
                 <div class="relations-manager-title">Liens de <span id="selectedMemberName"></span></div>
                 <div id="relationsList" class="relations-list"></div>
+
+                <!-- Formulaire pour ajouter un nouveau lien -->
+                <div class="add-relation-form">
+                    <span style="color: #e65100;">Ajouter un lien :</span>
+                    <select id="newRelationType">
+                        <option value="">Type de lien...</option>
+                        <optgroup label="Parents">
+                            <option value="pere">Est le père de</option>
+                            <option value="mere">Est la mère de</option>
+                            <option value="beau-pere">Est le beau-père de</option>
+                            <option value="belle-mere">Est la belle-mère de</option>
+                        </optgroup>
+                        <optgroup label="Enfants">
+                            <option value="fils">Est le fils de</option>
+                            <option value="fille">Est la fille de</option>
+                        </optgroup>
+                        <optgroup label="Frères et Sœurs">
+                            <option value="frere">Est le frère de</option>
+                            <option value="soeur">Est la sœur de</option>
+                            <option value="demi-frere">Est le demi-frère de</option>
+                            <option value="demi-soeur">Est la demi-sœur de</option>
+                        </optgroup>
+                        <optgroup label="Conjoint">
+                            <option value="conjoint">Est le/la conjoint(e) de</option>
+                        </optgroup>
+                        <optgroup label="Grands-parents">
+                            <option value="grand-pere">Est le grand-père de</option>
+                            <option value="grand-mere">Est la grand-mère de</option>
+                            <option value="petit-fils">Est le petit-fils de</option>
+                            <option value="petite-fille">Est la petite-fille de</option>
+                        </optgroup>
+                        <optgroup label="Oncles/Tantes/Cousins">
+                            <option value="oncle">Est l'oncle de</option>
+                            <option value="tante">Est la tante de</option>
+                            <option value="cousin">Est le cousin de</option>
+                            <option value="cousine">Est la cousine de</option>
+                        </optgroup>
+                    </select>
+                    <select id="newRelatedPerson">
+                        <option value="">Personne...</option>
+                    </select>
+                    <button type="button" class="btn-add-relation" onclick="addNewRelation()">+ Ajouter</button>
+                </div>
             </div>
 
             <!-- Arbre généalogique -->
@@ -1005,7 +1098,64 @@
                 `).join('');
             }
 
+            // Mettre à jour le select des personnes (exclure la personne sélectionnée)
+            updateNewRelationSelect();
+
             manager.style.display = 'block';
+        }
+
+        // Mettre à jour le select pour ajouter un nouveau lien
+        function updateNewRelationSelect() {
+            const select = document.getElementById('newRelatedPerson');
+            select.innerHTML = '<option value="">Personne...</option>';
+
+            familyMembers
+                .filter(m => m.id !== selectedMemberId)
+                .forEach(member => {
+                    const option = document.createElement('option');
+                    option.value = member.id;
+                    option.textContent = `${member.prenom} ${member.nom}`;
+                    select.appendChild(option);
+                });
+
+            // Réinitialiser les sélections
+            document.getElementById('newRelationType').value = '';
+        }
+
+        // Ajouter un nouveau lien
+        async function addNewRelation() {
+            const relationType = document.getElementById('newRelationType').value;
+            const relatedPersonId = document.getElementById('newRelatedPerson').value;
+
+            if (!relationType || !relatedPersonId) {
+                showMessage('Choisis un type de lien et une personne', 'error');
+                return;
+            }
+
+            const relatedMember = familyMembers.find(m => m.id === relatedPersonId);
+
+            try {
+                const { error } = await supabaseClient
+                    .from('family_relations')
+                    .insert([{
+                        member_id: selectedMemberId,
+                        related_member_id: relatedPersonId,
+                        relation_type: relationType
+                    }]);
+
+                if (error) throw error;
+
+                showMessage(`Lien avec ${relatedMember.prenom} ajouté !`, 'success');
+
+                // Réinitialiser le formulaire
+                document.getElementById('newRelationType').value = '';
+                document.getElementById('newRelatedPerson').value = '';
+
+                await loadFamilyMembers();
+            } catch (error) {
+                console.error('Erreur:', error);
+                showMessage('Erreur lors de l\'ajout du lien', 'error');
+            }
         }
 
         // Supprimer un lien
