@@ -3,16 +3,530 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Mon Arbre Généalogique</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* Vos styles CSS ici */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Chalkboard', cursive;
+        }
+
+        body {
+            background: linear-gradient(135deg, #a8e6cf 0%, #88d8b0 50%, #ffeaa7 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #e17055;
+            font-size: 2.5em;
+            text-shadow: 3px 3px 0px #fdcb6e;
+            margin-bottom: 30px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .tree-icon {
+            font-size: 3em;
+            display: block;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        /* Formulaire */
+        .form-container {
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border: 5px dashed #74b9ff;
+        }
+
+        .form-title {
+            color: #6c5ce7;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            color: #e17055;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            padding: 15px;
+            border: 3px solid #dfe6e9;
+            border-radius: 15px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #74b9ff;
+            box-shadow: 0 0 15px rgba(116, 185, 255, 0.5);
+        }
+
+        .parent-select {
+            grid-column: 1 / -1;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(232, 67, 147, 0.4);
+        }
+
+        .btn-container {
+            text-align: center;
+            grid-column: 1 / -1;
+        }
+
+        /* Arbre généalogique */
+        .tree-container {
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 5px dashed #00b894;
+            min-height: 400px;
+        }
+
+        .tree-title {
+            color: #00b894;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.5em;
+        }
+
+        .family-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .person-card {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            min-width: 180px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            border: 3px solid;
+        }
+
+        .person-card.male {
+            border-color: #74b9ff;
+        }
+
+        .person-card.female {
+            border-color: #fd79a8;
+        }
+
+        .person-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .person-avatar {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .person-name {
+            font-size: 1.2em;
+            color: #2d3436;
+            margin-bottom: 5px;
+        }
+
+        .person-birth {
+            color: #636e72;
+            font-size: 0.9em;
+        }
+
+        .person-parent {
+            color: #6c5ce7;
+            font-size: 0.85em;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff7675;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1em;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .person-card:hover .delete-btn {
+            opacity: 1;
+        }
+
+        .delete-btn:hover {
+            background: #d63031;
+        }
+
+        .no-members {
+            text-align: center;
+            color: #b2bec3;
+            font-size: 1.2em;
+            padding: 50px;
+        }
+
+        .no-members span {
+            font-size: 3em;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #6c5ce7;
+        }
+
+        .loading-spinner {
+            font-size: 3em;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Messages */
+        .message {
+            padding: 15px 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.success {
+            background: #55efc4;
+            color: #00b894;
+        }
+
+        .message.error {
+            background: #fab1a0;
+            color: #d63031;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .person-card {
+                min-width: 150px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Votre contenu ici -->
-    Bienvenue
+    <div class="container">
+        <span class="tree-icon">🌳</span>
+        <h1>Mon Arbre Généalogique</h1>
+
+        <div id="message"></div>
+
+        <!-- Formulaire d'ajout -->
+        <div class="form-container">
+            <h2 class="form-title">Ajouter un membre de la famille</h2>
+            <form id="addMemberForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="prenom">Prénom</label>
+                        <input type="text" id="prenom" name="prenom" placeholder="Ex: Marie" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nom">Nom</label>
+                        <input type="text" id="nom" name="nom" placeholder="Ex: Dupont" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dateNaissance">Date de naissance</label>
+                        <input type="date" id="dateNaissance" name="dateNaissance" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sexe">Sexe</label>
+                        <select id="sexe" name="sexe" required>
+                            <option value="">Choisir...</option>
+                            <option value="M">Garçon</option>
+                            <option value="F">Fille</option>
+                        </select>
+                    </div>
+                    <div class="form-group parent-select">
+                        <label for="parentId">Parent (optionnel)</label>
+                        <select id="parentId" name="parentId">
+                            <option value="">Aucun parent sélectionné</option>
+                        </select>
+                    </div>
+                    <div class="btn-container">
+                        <button type="submit" class="btn">Ajouter à la famille</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Affichage de l'arbre -->
+        <div class="tree-container">
+            <h2 class="tree-title">Ma Famille</h2>
+            <div id="familyTree" class="family-grid">
+                <div class="loading">
+                    <span class="loading-spinner">🌻</span>
+                    <p>Chargement de la famille...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Votre code JavaScript ici
+        // Configuration Supabase
+        const SUPABASE_URL = 'https://boybuqexjmzvfumfrmfk.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_6SSMn8zMrXuZm6SLrRCHyg_tu4L_Wt4';
+
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let familyMembers = [];
+
+        // Afficher un message
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = `<div class="message ${type}">${text}</div>`;
+            setTimeout(() => {
+                messageDiv.innerHTML = '';
+            }, 3000);
+        }
+
+        // Calculer l'âge
+        function calculateAge(birthDate) {
+            const today = new Date();
+            const birth = new Date(birthDate);
+            let age = today.getFullYear() - birth.getFullYear();
+            const monthDiff = today.getMonth() - birth.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        // Formater la date
+        function formatDate(dateString) {
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('fr-FR', options);
+        }
+
+        // Obtenir l'avatar selon le sexe et l'âge
+        function getAvatar(sexe, birthDate) {
+            const age = calculateAge(birthDate);
+            if (sexe === 'M') {
+                if (age < 12) return '👦';
+                if (age < 20) return '🧑';
+                if (age < 60) return '👨';
+                return '👴';
+            } else {
+                if (age < 12) return '👧';
+                if (age < 20) return '👩';
+                if (age < 60) return '👩';
+                return '👵';
+            }
+        }
+
+        // Trouver le nom du parent
+        function getParentName(parentId) {
+            const parent = familyMembers.find(m => m.id === parentId);
+            return parent ? `${parent.prenom} ${parent.nom}` : null;
+        }
+
+        // Charger les membres de la famille
+        async function loadFamilyMembers() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('family_members')
+                    .select('*')
+                    .order('date_naissance', { ascending: true });
+
+                if (error) throw error;
+
+                familyMembers = data || [];
+                renderFamilyTree();
+                updateParentSelect();
+            } catch (error) {
+                console.error('Erreur lors du chargement:', error);
+                document.getElementById('familyTree').innerHTML = `
+                    <div class="no-members">
+                        <span>😢</span>
+                        <p>Erreur de connexion à la base de données</p>
+                        <p style="font-size: 0.8em; margin-top: 10px;">Vérifiez que la table "family_members" existe</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Mettre à jour le select des parents
+        function updateParentSelect() {
+            const select = document.getElementById('parentId');
+            select.innerHTML = '<option value="">Aucun parent sélectionné</option>';
+
+            familyMembers.forEach(member => {
+                const option = document.createElement('option');
+                option.value = member.id;
+                option.textContent = `${member.prenom} ${member.nom}`;
+                select.appendChild(option);
+            });
+        }
+
+        // Afficher l'arbre généalogique
+        function renderFamilyTree() {
+            const container = document.getElementById('familyTree');
+
+            if (familyMembers.length === 0) {
+                container.innerHTML = `
+                    <div class="no-members">
+                        <span>👨‍👩‍👧‍👦</span>
+                        <p>Aucun membre dans la famille pour l'instant !</p>
+                        <p style="font-size: 0.9em;">Ajoute quelqu'un pour commencer ton arbre</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = familyMembers.map(member => `
+                <div class="person-card ${member.sexe === 'M' ? 'male' : 'female'}">
+                    <button class="delete-btn" onclick="deleteMember('${member.id}')" title="Supprimer">✕</button>
+                    <div class="person-avatar">${getAvatar(member.sexe, member.date_naissance)}</div>
+                    <div class="person-name">${member.prenom} ${member.nom}</div>
+                    <div class="person-birth">
+                        Né(e) le ${formatDate(member.date_naissance)}<br>
+                        (${calculateAge(member.date_naissance)} ans)
+                    </div>
+                    ${member.parent_id ? `<div class="person-parent">Enfant de ${getParentName(member.parent_id)}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Ajouter un membre
+        async function addMember(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const memberData = {
+                prenom: form.prenom.value.trim(),
+                nom: form.nom.value.trim(),
+                date_naissance: form.dateNaissance.value,
+                sexe: form.sexe.value,
+                parent_id: form.parentId.value || null
+            };
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('family_members')
+                    .insert([memberData])
+                    .select();
+
+                if (error) throw error;
+
+                showMessage(`${memberData.prenom} a été ajouté(e) à la famille !`, 'success');
+                form.reset();
+                await loadFamilyMembers();
+            } catch (error) {
+                console.error('Erreur lors de l\'ajout:', error);
+                showMessage('Erreur lors de l\'ajout. Vérifie la connexion.', 'error');
+            }
+        }
+
+        // Supprimer un membre
+        async function deleteMember(id) {
+            const member = familyMembers.find(m => m.id === id);
+            if (!confirm(`Es-tu sûr de vouloir supprimer ${member.prenom} de l'arbre ?`)) {
+                return;
+            }
+
+            try {
+                const { error } = await supabaseClient
+                    .from('family_members')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                showMessage(`${member.prenom} a été retiré(e) de l'arbre`, 'success');
+                await loadFamilyMembers();
+            } catch (error) {
+                console.error('Erreur lors de la suppression:', error);
+                showMessage('Erreur lors de la suppression', 'error');
+            }
+        }
+
+        // Initialisation
+        document.getElementById('addMemberForm').addEventListener('submit', addMember);
+        loadFamilyMembers();
     </script>
 </body>
 </html>
