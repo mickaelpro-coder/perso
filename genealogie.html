@@ -434,6 +434,84 @@
             margin-right: 5px;
         }
 
+        /* Section de gestion des liens */
+        .relations-manager {
+            background: #fff3e0;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 3px solid #ffcc80;
+        }
+
+        .relations-manager-title {
+            color: #e65100;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .relations-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .relation-item {
+            background: white;
+            border: 2px solid #ffcc80;
+            padding: 8px 12px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85em;
+            transition: all 0.3s ease;
+        }
+
+        .relation-item:hover {
+            border-color: #ff7043;
+            background: #fff8e1;
+        }
+
+        .relation-item .relation-text {
+            color: #5d4037;
+        }
+
+        .relation-item .relation-type {
+            background: #6c5ce7;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+        }
+
+        .relation-delete-btn {
+            background: #ff7675;
+            color: white;
+            border: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.75em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .relation-delete-btn:hover {
+            background: #d63031;
+            transform: scale(1.1);
+        }
+
+        .no-relations {
+            color: #9e9e9e;
+            text-align: center;
+            font-style: italic;
+        }
+
         /* Messages */
         .message {
             padding: 15px 25px;
@@ -620,6 +698,12 @@
             <div id="membersList" class="members-list">
                 <div class="members-list-title">Membres de la famille</div>
                 <div id="membersChips" class="members-chips"></div>
+            </div>
+
+            <!-- Gestionnaire de liens -->
+            <div id="relationsManager" class="relations-manager" style="display: none;">
+                <div class="relations-manager-title">Liens de <span id="selectedMemberName"></span></div>
+                <div id="relationsList" class="relations-list"></div>
             </div>
 
             <!-- Arbre généalogique -->
@@ -824,6 +908,7 @@
                     selectedMemberId = familyMembers[0].id;
                 }
 
+                updateRelationsManager();
                 renderFamilyTree();
             } catch (error) {
                 console.error('Erreur:', error);
@@ -858,7 +943,89 @@
         function selectMember(memberId) {
             selectedMemberId = memberId;
             updateMembersChips();
+            updateRelationsManager();
             renderFamilyTree();
+        }
+
+        // Mettre à jour le gestionnaire de liens
+        function updateRelationsManager() {
+            const manager = document.getElementById('relationsManager');
+            const nameSpan = document.getElementById('selectedMemberName');
+            const listContainer = document.getElementById('relationsList');
+
+            if (!selectedMemberId) {
+                manager.style.display = 'none';
+                return;
+            }
+
+            const member = familyMembers.find(m => m.id === selectedMemberId);
+            if (!member) {
+                manager.style.display = 'none';
+                return;
+            }
+
+            // Trouver tous les liens de ce membre
+            const memberRelations = [];
+            familyRelations.forEach(rel => {
+                if (rel.member_id === selectedMemberId) {
+                    const relatedMember = familyMembers.find(m => m.id === rel.related_member_id);
+                    if (relatedMember) {
+                        memberRelations.push({
+                            id: rel.id,
+                            relatedMember: relatedMember,
+                            type: rel.relation_type,
+                            displayType: relationLabels[rel.relation_type] || rel.relation_type
+                        });
+                    }
+                } else if (rel.related_member_id === selectedMemberId) {
+                    const relatedMember = familyMembers.find(m => m.id === rel.member_id);
+                    if (relatedMember) {
+                        const inverseType = getInverseRelation(rel.relation_type, selectedMemberId);
+                        memberRelations.push({
+                            id: rel.id,
+                            relatedMember: relatedMember,
+                            type: inverseType,
+                            displayType: relationLabels[inverseType] || inverseType
+                        });
+                    }
+                }
+            });
+
+            nameSpan.textContent = member.prenom;
+
+            if (memberRelations.length === 0) {
+                listContainer.innerHTML = '<p class="no-relations">Aucun lien pour cette personne</p>';
+            } else {
+                listContainer.innerHTML = memberRelations.map(rel => `
+                    <div class="relation-item">
+                        <span class="relation-type">${rel.displayType}</span>
+                        <span class="relation-text">de ${rel.relatedMember.prenom} ${rel.relatedMember.nom}</span>
+                        <button class="relation-delete-btn" onclick="deleteRelation('${rel.id}', '${rel.relatedMember.prenom}')" title="Supprimer ce lien">✕</button>
+                    </div>
+                `).join('');
+            }
+
+            manager.style.display = 'block';
+        }
+
+        // Supprimer un lien
+        async function deleteRelation(relationId, relatedName) {
+            if (!confirm(`Supprimer le lien avec ${relatedName} ?`)) return;
+
+            try {
+                const { error } = await supabaseClient
+                    .from('family_relations')
+                    .delete()
+                    .eq('id', relationId);
+
+                if (error) throw error;
+
+                showMessage(`Lien avec ${relatedName} supprimé`, 'success');
+                await loadFamilyMembers();
+            } catch (error) {
+                console.error('Erreur:', error);
+                showMessage('Erreur lors de la suppression du lien', 'error');
+            }
         }
 
         // Mettre à jour le select
