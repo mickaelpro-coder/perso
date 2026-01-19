@@ -626,6 +626,156 @@
             color: #d63031;
         }
 
+        /* Formulaire de modification */
+        .edit-form {
+            background: #e8f5e9;
+            border: 2px solid #81c784;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .edit-form-title {
+            color: #2e7d32;
+            font-size: 1em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .edit-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .edit-form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .edit-form-group label {
+            font-size: 0.85em;
+            color: #2e7d32;
+            margin-bottom: 4px;
+        }
+
+        .edit-form-group input,
+        .edit-form-group select {
+            padding: 8px;
+            border: 2px solid #a5d6a7;
+            border-radius: 10px;
+            font-size: 0.9em;
+            font-family: inherit;
+        }
+
+        .edit-form-group input:focus,
+        .edit-form-group select:focus {
+            outline: none;
+            border-color: #66bb6a;
+        }
+
+        .edit-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .btn-save:hover {
+            transform: scale(1.05);
+            box-shadow: 0 3px 10px rgba(67, 160, 71, 0.4);
+        }
+
+        .btn-cancel {
+            background: #bdbdbd;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background: #9e9e9e;
+        }
+
+        /* Checkbox stylé */
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1em;
+            color: #636e72;
+            margin-top: 10px;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-custom {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #dfe6e9;
+            border-radius: 8px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .checkbox-label input[type="checkbox"]:checked + .checkbox-custom {
+            background: #a29bfe;
+            border-color: #6c5ce7;
+        }
+
+        .checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Style pour personne décédée */
+        .person-card.deceased {
+            opacity: 0.7;
+            filter: grayscale(40%);
+        }
+
+        .person-card.deceased .person-avatar::after {
+            content: '🕊️';
+            font-size: 0.5em;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+
+        .person-avatar {
+            position: relative;
+        }
+
+        .deceased-badge {
+            font-size: 0.7em;
+            color: #636e72;
+            margin-top: 3px;
+        }
+
         .no-members {
             text-align: center;
             color: #b2bec3;
@@ -711,8 +861,8 @@
                         <input type="text" id="nom" name="nom" placeholder="Ex: Dupont" required>
                     </div>
                     <div class="form-group">
-                        <label for="dateNaissance">Date de naissance</label>
-                        <input type="date" id="dateNaissance" name="dateNaissance" required>
+                        <label for="dateNaissance">Date de naissance (optionnel)</label>
+                        <input type="text" id="dateNaissance" name="dateNaissance" placeholder="Ex: 1985 ou 15/03/1985">
                     </div>
                     <div class="form-group">
                         <label for="sexe">Sexe</label>
@@ -722,51 +872,27 @@
                             <option value="F">Fille</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="decede" name="decede">
+                            <span class="checkbox-custom"></span>
+                            Décédé(e) 🕊️
+                        </label>
+                    </div>
 
                     <div class="relation-section">
-                        <div class="relation-title">Lien avec un membre existant (optionnel)</div>
+                        <div class="relation-title">Parents (optionnel)</div>
                         <div class="relation-grid">
                             <div class="form-group">
-                                <label for="relatedPerson">Personne liée</label>
-                                <select id="relatedPerson" name="relatedPerson">
-                                    <option value="">Aucune personne</option>
+                                <label for="pereId">👨 Père</label>
+                                <select id="pereId" name="pereId">
+                                    <option value="">Aucun père</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="relationType">Type de lien</label>
-                                <select id="relationType" name="relationType">
-                                    <option value="">Choisir le lien...</option>
-                                    <optgroup label="Parents">
-                                        <option value="pere">Est le père de</option>
-                                        <option value="mere">Est la mère de</option>
-                                        <option value="beau-pere">Est le beau-père de</option>
-                                        <option value="belle-mere">Est la belle-mère de</option>
-                                    </optgroup>
-                                    <optgroup label="Enfants">
-                                        <option value="fils">Est le fils de</option>
-                                        <option value="fille">Est la fille de</option>
-                                    </optgroup>
-                                    <optgroup label="Frères et Sœurs">
-                                        <option value="frere">Est le frère de</option>
-                                        <option value="soeur">Est la sœur de</option>
-                                        <option value="demi-frere">Est le demi-frère de</option>
-                                        <option value="demi-soeur">Est la demi-sœur de</option>
-                                    </optgroup>
-                                    <optgroup label="Conjoint">
-                                        <option value="conjoint">Est le/la conjoint(e) de</option>
-                                    </optgroup>
-                                    <optgroup label="Grands-parents">
-                                        <option value="grand-pere">Est le grand-père de</option>
-                                        <option value="grand-mere">Est la grand-mère de</option>
-                                        <option value="petit-fils">Est le petit-fils de</option>
-                                        <option value="petite-fille">Est la petite-fille de</option>
-                                    </optgroup>
-                                    <optgroup label="Oncles/Tantes/Cousins">
-                                        <option value="oncle">Est l'oncle de</option>
-                                        <option value="tante">Est la tante de</option>
-                                        <option value="cousin">Est le cousin de</option>
-                                        <option value="cousine">Est la cousine de</option>
-                                    </optgroup>
+                                <label for="mereId">👩 Mère</label>
+                                <select id="mereId" name="mereId">
+                                    <option value="">Aucune mère</option>
                                 </select>
                             </div>
                         </div>
@@ -792,51 +918,63 @@
 
             <!-- Gestionnaire de liens -->
             <div id="relationsManager" class="relations-manager" style="display: none;">
-                <div class="relations-manager-title">Liens de <span id="selectedMemberName"></span></div>
+                <div class="relations-manager-title">Modifier <span id="selectedMemberName"></span></div>
+
+                <!-- Formulaire de modification -->
+                <div class="edit-form">
+                    <div class="edit-form-grid">
+                        <div class="edit-form-group">
+                            <label for="editPrenom">Prénom</label>
+                            <input type="text" id="editPrenom" placeholder="Prénom">
+                        </div>
+                        <div class="edit-form-group">
+                            <label for="editNom">Nom</label>
+                            <input type="text" id="editNom" placeholder="Nom">
+                        </div>
+                        <div class="edit-form-group">
+                            <label for="editDateNaissance">Date de naissance (optionnel)</label>
+                            <input type="text" id="editDateNaissance" placeholder="Ex: 1985">
+                        </div>
+                        <div class="edit-form-group">
+                            <label for="editSexe">Sexe</label>
+                            <select id="editSexe">
+                                <option value="M">Garçon</option>
+                                <option value="F">Fille</option>
+                            </select>
+                        </div>
+                        <div class="edit-form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="editDecede">
+                                <span class="checkbox-custom"></span>
+                                Décédé(e) 🕊️
+                            </label>
+                        </div>
+                    </div>
+                    <div class="edit-buttons">
+                        <button type="button" class="btn-save" onclick="saveEditMember()">Enregistrer</button>
+                    </div>
+                </div>
+
+                <div class="relations-manager-title" style="margin-top: 15px;">Liens</div>
                 <div id="relationsList" class="relations-list"></div>
 
                 <!-- Formulaire pour ajouter un nouveau lien -->
                 <div class="add-relation-form">
                     <span style="color: #e65100;">Ajouter un lien :</span>
-                    <select id="newRelationType">
-                        <option value="">Type de lien...</option>
-                        <optgroup label="Parents">
-                            <option value="pere">Est le père de</option>
-                            <option value="mere">Est la mère de</option>
-                            <option value="beau-pere">Est le beau-père de</option>
-                            <option value="belle-mere">Est la belle-mère de</option>
-                        </optgroup>
-                        <optgroup label="Enfants">
-                            <option value="fils">Est le fils de</option>
-                            <option value="fille">Est la fille de</option>
-                        </optgroup>
-                        <optgroup label="Frères et Sœurs">
-                            <option value="frere">Est le frère de</option>
-                            <option value="soeur">Est la sœur de</option>
-                            <option value="demi-frere">Est le demi-frère de</option>
-                            <option value="demi-soeur">Est la demi-sœur de</option>
-                        </optgroup>
-                        <optgroup label="Conjoint">
-                            <option value="conjoint">Est le/la conjoint(e) de</option>
-                        </optgroup>
-                        <optgroup label="Grands-parents">
-                            <option value="grand-pere">Est le grand-père de</option>
-                            <option value="grand-mere">Est la grand-mère de</option>
-                            <option value="petit-fils">Est le petit-fils de</option>
-                            <option value="petite-fille">Est la petite-fille de</option>
-                        </optgroup>
-                        <optgroup label="Oncles/Tantes/Cousins">
-                            <option value="oncle">Est l'oncle de</option>
-                            <option value="tante">Est la tante de</option>
-                            <option value="cousin">Est le cousin de</option>
-                            <option value="cousine">Est la cousine de</option>
-                        </optgroup>
-                    </select>
                     <select id="newRelatedPerson">
                         <option value="">Personne...</option>
                     </select>
+                    <select id="newRelationType">
+                        <option value="">Type de lien...</option>
+                        <option value="pere">Est le père</option>
+                        <option value="mere">Est la mère</option>
+                        <option value="conjoint">Est le/la conjoint(e)</option>
+                    </select>
                     <button type="button" class="btn-add-relation" onclick="addNewRelation()">+ Ajouter</button>
                 </div>
+                <p style="color: #9e9e9e; font-size: 0.8em; text-align: center; margin-top: 10px;">
+                    Les frères/sœurs, oncles/tantes, cousins et grands-parents sont calculés automatiquement !
+                </p>
             </div>
 
             <!-- Arbre généalogique -->
@@ -881,23 +1019,44 @@
 
         // Calculer l'âge
         function calculateAge(birthDate) {
+            if (!birthDate) return null;
             const today = new Date();
-            const birth = new Date(birthDate);
-            let age = today.getFullYear() - birth.getFullYear();
-            const monthDiff = today.getMonth() - birth.getMonth();
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) age--;
-            return age;
+            let birthYear;
+
+            // Si c'est juste une année (ex: "1985")
+            if (/^\d{4}$/.test(birthDate.trim())) {
+                birthYear = parseInt(birthDate.trim());
+            }
+            // Si c'est au format JJ/MM/AAAA ou DD/MM/YYYY
+            else if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(birthDate.trim())) {
+                const parts = birthDate.trim().split('/');
+                birthYear = parseInt(parts[2]);
+            }
+            // Si c'est au format AAAA-MM-JJ (ISO)
+            else if (/^\d{4}-\d{2}-\d{2}$/.test(birthDate.trim())) {
+                birthYear = parseInt(birthDate.trim().split('-')[0]);
+            }
+            // Sinon, essayer de parser comme date
+            else {
+                const birth = new Date(birthDate);
+                if (isNaN(birth.getTime())) return null;
+                birthYear = birth.getFullYear();
+            }
+
+            return today.getFullYear() - birthYear;
         }
 
         // Obtenir l'avatar
         function getAvatar(sexe, birthDate) {
             const age = calculateAge(birthDate);
             if (sexe === 'M') {
+                if (age === null) return '👤';
                 if (age < 12) return '👦';
                 if (age < 20) return '🧑';
                 if (age < 60) return '👨';
                 return '👴';
             } else {
+                if (age === null) return '👤';
                 if (age < 12) return '👧';
                 if (age < 20) return '👩';
                 if (age < 60) return '👩';
@@ -934,58 +1093,139 @@
             return inverseMap[relationType] || relationType;
         }
 
-        // Obtenir les relations d'un membre avec catégorisation
+        // Trouver les parents d'une personne
+        function getParentsOf(personId) {
+            const parents = [];
+            familyRelations.forEach(rel => {
+                if (rel.related_member_id === personId && ['pere', 'mere'].includes(rel.relation_type)) {
+                    const parent = familyMembers.find(m => m.id === rel.member_id);
+                    if (parent) parents.push({ member: parent, type: rel.relation_type });
+                }
+            });
+            return parents;
+        }
+
+        // Trouver les enfants d'une personne
+        function getChildrenOf(personId) {
+            const children = [];
+            familyRelations.forEach(rel => {
+                if (rel.member_id === personId && ['pere', 'mere'].includes(rel.relation_type)) {
+                    const child = familyMembers.find(m => m.id === rel.related_member_id);
+                    if (child) {
+                        const type = child.sexe === 'M' ? 'fils' : 'fille';
+                        children.push({ member: child, type: type });
+                    }
+                }
+            });
+            return children;
+        }
+
+        // Obtenir les relations d'un membre avec calcul automatique
         function getMemberRelationsGrouped(memberId) {
             const relations = {
-                parents: [],      // père, mère, beau-père, belle-mère
-                grandparents: [], // grand-père, grand-mère
-                siblings: [],     // frère, sœur, demi-frère, demi-sœur
-                spouse: [],       // conjoint
-                children: [],     // fils, fille
-                grandchildren: [], // petit-fils, petite-fille
-                unclesAunts: [],  // oncle, tante
-                cousins: [],      // cousin, cousine
+                parents: [],
+                grandparents: [],
+                siblings: [],
+                spouse: [],
+                children: [],
+                grandchildren: [],
+                unclesAunts: [],
+                cousins: [],
                 other: []
             };
 
-            familyRelations.forEach(rel => {
-                let relatedId, relType;
+            const addedIds = new Set([memberId]);
 
-                if (rel.member_id === memberId) {
-                    relatedId = rel.related_member_id;
-                    relType = rel.relation_type;
-                } else if (rel.related_member_id === memberId) {
-                    relatedId = rel.member_id;
-                    relType = getInverseRelation(rel.relation_type, memberId);
-                } else {
-                    return;
+            // 1. Parents directs
+            const myParents = getParentsOf(memberId);
+            myParents.forEach(p => {
+                relations.parents.push(p);
+                addedIds.add(p.member.id);
+            });
+
+            // 2. Grands-parents (parents des parents)
+            myParents.forEach(parent => {
+                const grandparents = getParentsOf(parent.member.id);
+                grandparents.forEach(gp => {
+                    if (!addedIds.has(gp.member.id)) {
+                        const type = gp.member.sexe === 'M' ? 'grand-pere' : 'grand-mere';
+                        relations.grandparents.push({ member: gp.member, type: type });
+                        addedIds.add(gp.member.id);
+                    }
+                });
+            });
+
+            // 3. Frères et sœurs (enfants des mêmes parents)
+            myParents.forEach(parent => {
+                const siblings = getChildrenOf(parent.member.id);
+                siblings.forEach(sib => {
+                    if (!addedIds.has(sib.member.id)) {
+                        const type = sib.member.sexe === 'M' ? 'frere' : 'soeur';
+                        relations.siblings.push({ member: sib.member, type: type });
+                        addedIds.add(sib.member.id);
+                    }
+                });
+            });
+
+            // 4. Oncles et tantes (frères/sœurs des parents)
+            myParents.forEach(parent => {
+                const parentParents = getParentsOf(parent.member.id);
+                parentParents.forEach(gp => {
+                    const unclesAunts = getChildrenOf(gp.member.id);
+                    unclesAunts.forEach(ua => {
+                        if (!addedIds.has(ua.member.id)) {
+                            const type = ua.member.sexe === 'M' ? 'oncle' : 'tante';
+                            relations.unclesAunts.push({ member: ua.member, type: type });
+                            addedIds.add(ua.member.id);
+                        }
+                    });
+                });
+            });
+
+            // 5. Cousins (enfants des oncles/tantes)
+            relations.unclesAunts.forEach(ua => {
+                const cousins = getChildrenOf(ua.member.id);
+                cousins.forEach(cousin => {
+                    if (!addedIds.has(cousin.member.id)) {
+                        const type = cousin.member.sexe === 'M' ? 'cousin' : 'cousine';
+                        relations.cousins.push({ member: cousin.member, type: type });
+                        addedIds.add(cousin.member.id);
+                    }
+                });
+            });
+
+            // 6. Enfants directs
+            const myChildren = getChildrenOf(memberId);
+            myChildren.forEach(child => {
+                if (!addedIds.has(child.member.id)) {
+                    relations.children.push(child);
+                    addedIds.add(child.member.id);
                 }
+            });
 
-                const relatedMember = familyMembers.find(m => m.id === relatedId);
-                if (!relatedMember) return;
+            // 7. Petits-enfants (enfants des enfants)
+            relations.children.forEach(child => {
+                const grandchildren = getChildrenOf(child.member.id);
+                grandchildren.forEach(gc => {
+                    if (!addedIds.has(gc.member.id)) {
+                        const type = gc.member.sexe === 'M' ? 'petit-fils' : 'petite-fille';
+                        relations.grandchildren.push({ member: gc.member, type: type });
+                        addedIds.add(gc.member.id);
+                    }
+                });
+            });
 
-                const relationData = { member: relatedMember, type: relType };
-
-                if (['pere', 'mere'].includes(relType)) {
-                    relations.parents.push(relationData);
-                } else if (['beau-pere', 'belle-mere'].includes(relType)) {
-                    relations.parents.push(relationData);
-                } else if (['grand-pere', 'grand-mere'].includes(relType)) {
-                    relations.grandparents.push(relationData);
-                } else if (['frere', 'soeur', 'demi-frere', 'demi-soeur'].includes(relType)) {
-                    relations.siblings.push(relationData);
-                } else if (relType === 'conjoint') {
-                    relations.spouse.push(relationData);
-                } else if (['fils', 'fille'].includes(relType)) {
-                    relations.children.push(relationData);
-                } else if (['petit-fils', 'petite-fille'].includes(relType)) {
-                    relations.grandchildren.push(relationData);
-                } else if (['oncle', 'tante'].includes(relType)) {
-                    relations.unclesAunts.push(relationData);
-                } else if (['cousin', 'cousine'].includes(relType)) {
-                    relations.cousins.push(relationData);
-                } else {
-                    relations.other.push(relationData);
+            // 8. Conjoint (relation directe)
+            familyRelations.forEach(rel => {
+                if ((rel.member_id === memberId || rel.related_member_id === memberId) && rel.relation_type === 'conjoint') {
+                    const spouseId = rel.member_id === memberId ? rel.related_member_id : rel.member_id;
+                    if (!addedIds.has(spouseId)) {
+                        const spouse = familyMembers.find(m => m.id === spouseId);
+                        if (spouse) {
+                            relations.spouse.push({ member: spouse, type: 'conjoint' });
+                            addedIds.add(spouseId);
+                        }
+                    }
                 }
             });
 
@@ -995,13 +1235,17 @@
         // Créer une carte de personne
         function createPersonCard(member, relationLabel = null, isCenter = false) {
             const age = calculateAge(member.date_naissance);
+            const ageDisplay = age !== null ? `${age} ans` : '';
+            const isDeceased = member.decede === true;
+            const deceasedClass = isDeceased ? 'deceased' : '';
             return `
-                <div class="person-card ${member.sexe === 'M' ? 'male' : 'female'} ${isCenter ? 'center' : ''}"
+                <div class="person-card ${member.sexe === 'M' ? 'male' : 'female'} ${isCenter ? 'center' : ''} ${deceasedClass}"
                      onclick="selectMember('${member.id}')" data-id="${member.id}">
                     <button class="delete-btn" onclick="event.stopPropagation(); deleteMember('${member.id}')" title="Supprimer">✕</button>
-                    <div class="person-avatar">${getAvatar(member.sexe, member.date_naissance)}</div>
+                    <div class="person-avatar">${getAvatar(member.sexe, member.date_naissance)}${isDeceased ? '<span style="position:absolute;top:-5px;right:-10px;font-size:0.5em;">🕊️</span>' : ''}</div>
                     <div class="person-name">${member.prenom}</div>
-                    <div class="person-birth">${age} ans</div>
+                    ${ageDisplay ? `<div class="person-birth">${ageDisplay}</div>` : ''}
+                    ${isDeceased ? '<div class="deceased-badge">🕊️ Décédé(e)</div>' : ''}
                     ${relationLabel ? `<div class="person-relation-label">${relationLabel}</div>` : ''}
                 </div>
             `;
@@ -1126,6 +1370,13 @@
 
             nameSpan.textContent = member.prenom;
 
+            // Remplir le formulaire de modification
+            document.getElementById('editPrenom').value = member.prenom;
+            document.getElementById('editNom').value = member.nom;
+            document.getElementById('editDateNaissance').value = member.date_naissance || '';
+            document.getElementById('editSexe').value = member.sexe;
+            document.getElementById('editDecede').checked = member.decede === true;
+
             if (memberRelations.length === 0) {
                 listContainer.innerHTML = '<p class="no-relations">Aucun lien pour cette personne</p>';
             } else {
@@ -1218,15 +1469,61 @@
             }
         }
 
-        // Mettre à jour le select
+        // Enregistrer les modifications d'un membre
+        async function saveEditMember() {
+            if (!selectedMemberId) return;
+
+            const prenom = document.getElementById('editPrenom').value.trim();
+            const nom = document.getElementById('editNom').value.trim();
+            const dateNaissance = document.getElementById('editDateNaissance').value || null;
+            const sexe = document.getElementById('editSexe').value;
+            const decede = document.getElementById('editDecede').checked;
+
+            if (!prenom || !nom || !sexe) {
+                showMessage('Remplis au moins le prénom, le nom et le sexe', 'error');
+                return;
+            }
+
+            try {
+                const { error } = await supabaseClient
+                    .from('family_members')
+                    .update({
+                        prenom: prenom,
+                        nom: nom,
+                        date_naissance: dateNaissance,
+                        sexe: sexe,
+                        decede: decede
+                    })
+                    .eq('id', selectedMemberId);
+
+                if (error) throw error;
+
+                showMessage(`${prenom} a été modifié(e) ! ✅`, 'success');
+                await loadFamilyMembers();
+            } catch (error) {
+                console.error('Erreur:', error);
+                showMessage('Erreur lors de la modification', 'error');
+            }
+        }
+
+        // Mettre à jour les selects de parents
         function updatePersonSelect() {
-            const select = document.getElementById('relatedPerson');
-            select.innerHTML = '<option value="">Aucune personne</option>';
+            const pereSelect = document.getElementById('pereId');
+            const mereSelect = document.getElementById('mereId');
+
+            pereSelect.innerHTML = '<option value="">Aucun père</option>';
+            mereSelect.innerHTML = '<option value="">Aucune mère</option>';
+
             familyMembers.forEach(member => {
                 const option = document.createElement('option');
                 option.value = member.id;
                 option.textContent = `${member.prenom} ${member.nom}`;
-                select.appendChild(option);
+
+                if (member.sexe === 'M') {
+                    pereSelect.appendChild(option);
+                } else {
+                    mereSelect.appendChild(option);
+                }
             });
         }
 
@@ -1366,12 +1663,13 @@
             const memberData = {
                 prenom: form.prenom.value.trim(),
                 nom: form.nom.value.trim(),
-                date_naissance: form.dateNaissance.value,
-                sexe: form.sexe.value
+                date_naissance: form.dateNaissance.value || null,
+                sexe: form.sexe.value,
+                decede: form.decede.checked
             };
 
-            const relatedPersonId = form.relatedPerson.value;
-            const relationType = form.relationType.value;
+            const pereId = form.pereId.value;
+            const mereId = form.mereId.value;
 
             try {
                 const { data: newMember, error: memberError } = await supabaseClient
@@ -1382,14 +1680,29 @@
 
                 if (memberError) throw memberError;
 
-                if (relatedPersonId && relationType) {
+                // Ajouter les relations avec les parents
+                const relationsToAdd = [];
+
+                if (pereId) {
+                    relationsToAdd.push({
+                        member_id: pereId,
+                        related_member_id: newMember.id,
+                        relation_type: 'pere'
+                    });
+                }
+
+                if (mereId) {
+                    relationsToAdd.push({
+                        member_id: mereId,
+                        related_member_id: newMember.id,
+                        relation_type: 'mere'
+                    });
+                }
+
+                if (relationsToAdd.length > 0) {
                     await supabaseClient
                         .from('family_relations')
-                        .insert([{
-                            member_id: newMember.id,
-                            related_member_id: relatedPersonId,
-                            relation_type: relationType
-                        }]);
+                        .insert(relationsToAdd);
                 }
 
                 showMessage(`${memberData.prenom} a été ajouté(e) ! 🎉`, 'success');
