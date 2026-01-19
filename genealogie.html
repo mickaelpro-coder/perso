@@ -20,7 +20,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -133,6 +133,16 @@
             box-shadow: 0 5px 20px rgba(232, 67, 147, 0.4);
         }
 
+        .btn-small {
+            padding: 8px 20px;
+            font-size: 0.9em;
+            margin: 5px;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+        }
+
         .btn-container {
             text-align: center;
             grid-column: 1 / -1;
@@ -145,34 +155,68 @@
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             border: 5px dashed #00b894;
-            min-height: 400px;
+            min-height: 500px;
+            overflow-x: auto;
         }
 
         .tree-title {
             color: #00b894;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
             font-size: 1.5em;
         }
 
-        .family-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
+        .tree-subtitle {
+            text-align: center;
+            color: #636e72;
+            margin-bottom: 20px;
+            font-size: 0.9em;
         }
 
+        /* Structure de l'arbre */
+        .family-tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            min-width: fit-content;
+        }
+
+        .tree-level {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 30px;
+            position: relative;
+        }
+
+        .tree-level-label {
+            position: absolute;
+            left: -100px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #dfe6e9;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            color: #636e72;
+            white-space: nowrap;
+        }
+
+        /* Cartes des personnes */
         .person-card {
             background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
             border-radius: 20px;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
-            min-width: 200px;
-            max-width: 250px;
+            min-width: 140px;
+            max-width: 160px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
             position: relative;
             border: 3px solid;
+            cursor: pointer;
         }
 
         .person-card.male {
@@ -184,64 +228,66 @@
         }
 
         .person-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .person-card.center {
+            border-width: 5px;
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            z-index: 10;
+        }
+
+        .person-card.center.male {
+            border-color: #0984e3;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        }
+
+        .person-card.center.female {
+            border-color: #e84393;
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
         }
 
         .person-avatar {
-            font-size: 3em;
-            margin-bottom: 10px;
+            font-size: 2.5em;
+            margin-bottom: 8px;
         }
 
         .person-name {
-            font-size: 1.2em;
+            font-size: 1em;
             color: #2d3436;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
+            font-weight: bold;
         }
 
         .person-birth {
             color: #636e72;
-            font-size: 0.9em;
-        }
-
-        .person-relations {
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 2px dashed #dfe6e9;
-        }
-
-        .relation-tag {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 12px;
             font-size: 0.75em;
-            margin: 3px;
-            color: white;
         }
 
-        .relation-tag.pere, .relation-tag.mere { background: #e17055; }
-        .relation-tag.fils, .relation-tag.fille { background: #00b894; }
-        .relation-tag.frere, .relation-tag.soeur { background: #0984e3; }
-        .relation-tag.conjoint { background: #e84393; }
-        .relation-tag.beau-pere, .relation-tag.belle-mere { background: #6c5ce7; }
-        .relation-tag.demi-frere, .relation-tag.demi-soeur { background: #00cec9; }
-        .relation-tag.oncle, .relation-tag.tante { background: #fdcb6e; color: #2d3436; }
-        .relation-tag.cousin, .relation-tag.cousine { background: #81ecec; color: #2d3436; }
-        .relation-tag.grand-pere, .relation-tag.grand-mere { background: #fab1a0; color: #2d3436; }
-        .relation-tag.petit-fils, .relation-tag.petite-fille { background: #a29bfe; }
+        .person-relation-label {
+            background: #6c5ce7;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            margin-top: 8px;
+            display: inline-block;
+        }
 
         .delete-btn {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 5px;
+            right: 5px;
             background: #ff7675;
             color: white;
             border: none;
-            width: 30px;
-            height: 30px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 1em;
+            font-size: 0.8em;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
@@ -254,35 +300,138 @@
             background: #d63031;
         }
 
-        .no-members {
-            text-align: center;
-            color: #b2bec3;
-            font-size: 1.2em;
-            padding: 50px;
+        /* Lignes de connexion */
+        .connector {
+            position: relative;
         }
 
-        .no-members span {
-            font-size: 3em;
-            display: block;
+        .connector-line {
+            stroke: #b2bec3;
+            stroke-width: 3;
+            fill: none;
+        }
+
+        .tree-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Groupes avec lignes */
+        .tree-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .tree-group::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            width: 3px;
+            height: 20px;
+            background: #b2bec3;
+        }
+
+        .tree-group.no-line::before {
+            display: none;
+        }
+
+        .tree-row {
+            display: flex;
+            gap: 20px;
+            position: relative;
+        }
+
+        .tree-row::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 140px);
+            height: 3px;
+            background: #b2bec3;
+        }
+
+        .tree-row.single::before {
+            display: none;
+        }
+
+        .tree-row > .person-card::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 10px;
+            background: #b2bec3;
+        }
+
+        .vertical-line {
+            width: 3px;
+            height: 30px;
+            background: #b2bec3;
+            margin: 0 auto;
+        }
+
+        .horizontal-line {
+            height: 3px;
+            background: #b2bec3;
+            position: absolute;
+        }
+
+        /* Section de sélection des membres */
+        .members-list {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 20px;
             margin-bottom: 20px;
         }
 
-        /* Loading */
-        .loading {
-            text-align: center;
-            padding: 50px;
+        .members-list-title {
             color: #6c5ce7;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.1em;
         }
 
-        .loading-spinner {
-            font-size: 3em;
-            animation: spin 1s linear infinite;
-            display: inline-block;
+        .members-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
         }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        .member-chip {
+            background: white;
+            border: 2px solid #dfe6e9;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .member-chip:hover {
+            border-color: #74b9ff;
+            background: #e3f2fd;
+        }
+
+        .member-chip.active {
+            border-color: #6c5ce7;
+            background: #e8e4f8;
+            font-weight: bold;
+        }
+
+        .member-chip .chip-avatar {
+            margin-right: 5px;
         }
 
         /* Messages */
@@ -309,22 +458,66 @@
             color: #d63031;
         }
 
+        .no-members {
+            text-align: center;
+            color: #b2bec3;
+            font-size: 1.2em;
+            padding: 50px;
+        }
+
+        .no-members span {
+            font-size: 3em;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #6c5ce7;
+        }
+
+        .loading-spinner {
+            font-size: 3em;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         /* Responsive */
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             h1 {
                 font-size: 1.8em;
             }
 
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .relation-grid {
+            .form-grid, .relation-grid {
                 grid-template-columns: 1fr;
             }
 
             .person-card {
-                min-width: 150px;
+                min-width: 110px;
+                max-width: 130px;
+                padding: 10px;
+            }
+
+            .person-avatar {
+                font-size: 2em;
+            }
+
+            .person-name {
+                font-size: 0.85em;
+            }
+
+            .tree-level {
+                gap: 15px;
+            }
+
+            .tree-level-label {
+                display: none;
             }
         }
     </style>
@@ -362,7 +555,6 @@
                         </select>
                     </div>
 
-                    <!-- Section des liens familiaux -->
                     <div class="relation-section">
                         <div class="relation-title">Lien avec un membre existant (optionnel)</div>
                         <div class="relation-grid">
@@ -421,8 +613,17 @@
 
         <!-- Affichage de l'arbre -->
         <div class="tree-container">
-            <h2 class="tree-title">Ma Famille</h2>
-            <div id="familyTree" class="family-grid">
+            <h2 class="tree-title">Mon Arbre Familial</h2>
+            <p class="tree-subtitle">Clique sur une personne pour la mettre au centre de l'arbre</p>
+
+            <!-- Liste des membres pour sélection -->
+            <div id="membersList" class="members-list">
+                <div class="members-list-title">Membres de la famille</div>
+                <div id="membersChips" class="members-chips"></div>
+            </div>
+
+            <!-- Arbre généalogique -->
+            <div id="familyTree" class="family-tree">
                 <div class="loading">
                     <span class="loading-spinner">🌻</span>
                     <p>Chargement de la famille...</p>
@@ -441,60 +642,24 @@
 
         let familyMembers = [];
         let familyRelations = [];
-
-        // Types de relations et leurs inverses
-        const relationInverses = {
-            'pere': 'fils/fille',
-            'mere': 'fils/fille',
-            'fils': 'pere/mere',
-            'fille': 'pere/mere',
-            'frere': 'frere/soeur',
-            'soeur': 'frere/soeur',
-            'demi-frere': 'demi-frere/demi-soeur',
-            'demi-soeur': 'demi-frere/demi-soeur',
-            'conjoint': 'conjoint',
-            'beau-pere': 'beau-fils/belle-fille',
-            'belle-mere': 'beau-fils/belle-fille',
-            'grand-pere': 'petit-fils/petite-fille',
-            'grand-mere': 'petit-fils/petite-fille',
-            'petit-fils': 'grand-pere/grand-mere',
-            'petite-fille': 'grand-pere/grand-mere',
-            'oncle': 'neveu/niece',
-            'tante': 'neveu/niece',
-            'cousin': 'cousin/cousine',
-            'cousine': 'cousin/cousine'
-        };
+        let selectedMemberId = null;
 
         // Labels pour l'affichage
         const relationLabels = {
-            'pere': 'Père',
-            'mere': 'Mère',
-            'fils': 'Fils',
-            'fille': 'Fille',
-            'frere': 'Frère',
-            'soeur': 'Sœur',
-            'demi-frere': 'Demi-frère',
-            'demi-soeur': 'Demi-sœur',
-            'conjoint': 'Conjoint(e)',
-            'beau-pere': 'Beau-père',
-            'belle-mere': 'Belle-mère',
-            'grand-pere': 'Grand-père',
-            'grand-mere': 'Grand-mère',
-            'petit-fils': 'Petit-fils',
-            'petite-fille': 'Petite-fille',
-            'oncle': 'Oncle',
-            'tante': 'Tante',
-            'cousin': 'Cousin',
-            'cousine': 'Cousine'
+            'pere': 'Père', 'mere': 'Mère', 'fils': 'Fils', 'fille': 'Fille',
+            'frere': 'Frère', 'soeur': 'Sœur', 'demi-frere': 'Demi-frère', 'demi-soeur': 'Demi-sœur',
+            'conjoint': 'Conjoint(e)', 'beau-pere': 'Beau-père', 'belle-mere': 'Belle-mère',
+            'grand-pere': 'Grand-père', 'grand-mere': 'Grand-mère',
+            'petit-fils': 'Petit-fils', 'petite-fille': 'Petite-fille',
+            'oncle': 'Oncle', 'tante': 'Tante', 'cousin': 'Cousin', 'cousine': 'Cousine',
+            'neveu': 'Neveu', 'niece': 'Nièce', 'beau-fils': 'Beau-fils', 'belle-fille': 'Belle-fille'
         };
 
         // Afficher un message
         function showMessage(text, type) {
             const messageDiv = document.getElementById('message');
             messageDiv.innerHTML = `<div class="message ${type}">${text}</div>`;
-            setTimeout(() => {
-                messageDiv.innerHTML = '';
-            }, 3000);
+            setTimeout(() => messageDiv.innerHTML = '', 3000);
         }
 
         // Calculer l'âge
@@ -503,19 +668,11 @@
             const birth = new Date(birthDate);
             let age = today.getFullYear() - birth.getFullYear();
             const monthDiff = today.getMonth() - birth.getMonth();
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-                age--;
-            }
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) age--;
             return age;
         }
 
-        // Formater la date
-        function formatDate(dateString) {
-            const options = { day: 'numeric', month: 'long', year: 'numeric' };
-            return new Date(dateString).toLocaleDateString('fr-FR', options);
-        }
-
-        // Obtenir l'avatar selon le sexe et l'âge
+        // Obtenir l'avatar
         function getAvatar(sexe, birthDate) {
             const age = calculateAge(birthDate);
             if (sexe === 'M') {
@@ -529,41 +686,6 @@
                 if (age < 60) return '👩';
                 return '👵';
             }
-        }
-
-        // Trouver le nom d'un membre
-        function getMemberName(memberId) {
-            const member = familyMembers.find(m => m.id === memberId);
-            return member ? `${member.prenom}` : null;
-        }
-
-        // Obtenir les relations d'un membre
-        function getMemberRelations(memberId) {
-            const relations = [];
-
-            familyRelations.forEach(rel => {
-                if (rel.member_id === memberId) {
-                    const relatedName = getMemberName(rel.related_member_id);
-                    if (relatedName) {
-                        relations.push({
-                            type: rel.relation_type,
-                            name: relatedName
-                        });
-                    }
-                } else if (rel.related_member_id === memberId) {
-                    const relatedName = getMemberName(rel.member_id);
-                    if (relatedName) {
-                        // Calculer la relation inverse
-                        const inverseType = getInverseRelation(rel.relation_type, memberId);
-                        relations.push({
-                            type: inverseType,
-                            name: relatedName
-                        });
-                    }
-                }
-            });
-
-            return relations;
         }
 
         // Obtenir la relation inverse
@@ -592,21 +714,102 @@
                 'cousin': sexe === 'M' ? 'cousin' : 'cousine',
                 'cousine': sexe === 'M' ? 'cousin' : 'cousine'
             };
-
             return inverseMap[relationType] || relationType;
         }
 
-        // Charger les membres de la famille
+        // Obtenir les relations d'un membre avec catégorisation
+        function getMemberRelationsGrouped(memberId) {
+            const relations = {
+                parents: [],      // père, mère, beau-père, belle-mère
+                grandparents: [], // grand-père, grand-mère
+                siblings: [],     // frère, sœur, demi-frère, demi-sœur
+                spouse: [],       // conjoint
+                children: [],     // fils, fille
+                grandchildren: [], // petit-fils, petite-fille
+                unclesAunts: [],  // oncle, tante
+                cousins: [],      // cousin, cousine
+                other: []
+            };
+
+            familyRelations.forEach(rel => {
+                let relatedId, relType;
+
+                if (rel.member_id === memberId) {
+                    relatedId = rel.related_member_id;
+                    relType = rel.relation_type;
+                } else if (rel.related_member_id === memberId) {
+                    relatedId = rel.member_id;
+                    relType = getInverseRelation(rel.relation_type, memberId);
+                } else {
+                    return;
+                }
+
+                const relatedMember = familyMembers.find(m => m.id === relatedId);
+                if (!relatedMember) return;
+
+                const relationData = { member: relatedMember, type: relType };
+
+                if (['pere', 'mere'].includes(relType)) {
+                    relations.parents.push(relationData);
+                } else if (['beau-pere', 'belle-mere'].includes(relType)) {
+                    relations.parents.push(relationData);
+                } else if (['grand-pere', 'grand-mere'].includes(relType)) {
+                    relations.grandparents.push(relationData);
+                } else if (['frere', 'soeur', 'demi-frere', 'demi-soeur'].includes(relType)) {
+                    relations.siblings.push(relationData);
+                } else if (relType === 'conjoint') {
+                    relations.spouse.push(relationData);
+                } else if (['fils', 'fille'].includes(relType)) {
+                    relations.children.push(relationData);
+                } else if (['petit-fils', 'petite-fille'].includes(relType)) {
+                    relations.grandchildren.push(relationData);
+                } else if (['oncle', 'tante'].includes(relType)) {
+                    relations.unclesAunts.push(relationData);
+                } else if (['cousin', 'cousine'].includes(relType)) {
+                    relations.cousins.push(relationData);
+                } else {
+                    relations.other.push(relationData);
+                }
+            });
+
+            return relations;
+        }
+
+        // Créer une carte de personne
+        function createPersonCard(member, relationLabel = null, isCenter = false) {
+            const age = calculateAge(member.date_naissance);
+            return `
+                <div class="person-card ${member.sexe === 'M' ? 'male' : 'female'} ${isCenter ? 'center' : ''}"
+                     onclick="selectMember('${member.id}')" data-id="${member.id}">
+                    <button class="delete-btn" onclick="event.stopPropagation(); deleteMember('${member.id}')" title="Supprimer">✕</button>
+                    <div class="person-avatar">${getAvatar(member.sexe, member.date_naissance)}</div>
+                    <div class="person-name">${member.prenom}</div>
+                    <div class="person-birth">${age} ans</div>
+                    ${relationLabel ? `<div class="person-relation-label">${relationLabel}</div>` : ''}
+                </div>
+            `;
+        }
+
+        // Créer un niveau de l'arbre
+        function createTreeLevel(members, labelText = '') {
+            if (members.length === 0) return '';
+
+            const cards = members.map(m => createPersonCard(m.member, relationLabels[m.type] || m.type)).join('');
+            const singleClass = members.length === 1 ? 'single' : '';
+
+            return `
+                <div class="tree-row ${singleClass}">
+                    ${cards}
+                </div>
+            `;
+        }
+
+        // Charger les membres
         async function loadFamilyMembers() {
             try {
                 const [membersResult, relationsResult] = await Promise.all([
-                    supabaseClient
-                        .from('family_members')
-                        .select('*')
-                        .order('date_naissance', { ascending: true }),
-                    supabaseClient
-                        .from('family_relations')
-                        .select('*')
+                    supabaseClient.from('family_members').select('*').order('date_naissance', { ascending: true }),
+                    supabaseClient.from('family_relations').select('*')
                 ]);
 
                 if (membersResult.error) throw membersResult.error;
@@ -614,25 +817,54 @@
                 familyMembers = membersResult.data || [];
                 familyRelations = relationsResult.data || [];
 
-                renderFamilyTree();
+                updateMembersChips();
                 updatePersonSelect();
+
+                if (familyMembers.length > 0 && !selectedMemberId) {
+                    selectedMemberId = familyMembers[0].id;
+                }
+
+                renderFamilyTree();
             } catch (error) {
-                console.error('Erreur lors du chargement:', error);
+                console.error('Erreur:', error);
                 document.getElementById('familyTree').innerHTML = `
                     <div class="no-members">
                         <span>😢</span>
-                        <p>Erreur de connexion à la base de données</p>
-                        <p style="font-size: 0.8em; margin-top: 10px;">Vérifiez que les tables existent</p>
+                        <p>Erreur de connexion</p>
                     </div>
                 `;
             }
         }
 
-        // Mettre à jour le select des personnes
+        // Mettre à jour les chips des membres
+        function updateMembersChips() {
+            const container = document.getElementById('membersChips');
+
+            if (familyMembers.length === 0) {
+                container.innerHTML = '<p style="color: #636e72;">Aucun membre pour l\'instant</p>';
+                return;
+            }
+
+            container.innerHTML = familyMembers.map(member => `
+                <div class="member-chip ${selectedMemberId === member.id ? 'active' : ''}"
+                     onclick="selectMember('${member.id}')">
+                    <span class="chip-avatar">${getAvatar(member.sexe, member.date_naissance)}</span>
+                    ${member.prenom} ${member.nom}
+                </div>
+            `).join('');
+        }
+
+        // Sélectionner un membre
+        function selectMember(memberId) {
+            selectedMemberId = memberId;
+            updateMembersChips();
+            renderFamilyTree();
+        }
+
+        // Mettre à jour le select
         function updatePersonSelect() {
             const select = document.getElementById('relatedPerson');
             select.innerHTML = '<option value="">Aucune personne</option>';
-
             familyMembers.forEach(member => {
                 const option = document.createElement('option');
                 option.value = member.id;
@@ -649,36 +881,100 @@
                 container.innerHTML = `
                     <div class="no-members">
                         <span>👨‍👩‍👧‍👦</span>
-                        <p>Aucun membre dans la famille pour l'instant !</p>
-                        <p style="font-size: 0.9em;">Ajoute quelqu'un pour commencer ton arbre</p>
+                        <p>Aucun membre dans la famille !</p>
+                        <p style="font-size: 0.9em;">Ajoute quelqu'un pour commencer</p>
                     </div>
                 `;
                 return;
             }
 
-            container.innerHTML = familyMembers.map(member => {
-                const relations = getMemberRelations(member.id);
-                const relationsHtml = relations.length > 0
-                    ? `<div class="person-relations">
-                        ${relations.map(rel =>
-                            `<span class="relation-tag ${rel.type}">${relationLabels[rel.type] || rel.type} de ${rel.name}</span>`
-                        ).join('')}
-                       </div>`
-                    : '';
+            const centerMember = familyMembers.find(m => m.id === selectedMemberId);
+            if (!centerMember) {
+                selectedMemberId = familyMembers[0].id;
+                renderFamilyTree();
+                return;
+            }
 
-                return `
-                    <div class="person-card ${member.sexe === 'M' ? 'male' : 'female'}">
-                        <button class="delete-btn" onclick="deleteMember('${member.id}')" title="Supprimer">✕</button>
-                        <div class="person-avatar">${getAvatar(member.sexe, member.date_naissance)}</div>
-                        <div class="person-name">${member.prenom} ${member.nom}</div>
-                        <div class="person-birth">
-                            Né(e) le ${formatDate(member.date_naissance)}<br>
-                            (${calculateAge(member.date_naissance)} ans)
+            const relations = getMemberRelationsGrouped(selectedMemberId);
+
+            let html = '';
+
+            // Niveau 1: Grands-parents
+            if (relations.grandparents.length > 0) {
+                html += `
+                    <div class="tree-level">
+                        <span class="tree-level-label">Grands-parents</span>
+                        ${createTreeLevel(relations.grandparents)}
+                    </div>
+                    <div class="vertical-line"></div>
+                `;
+            }
+
+            // Niveau 2: Parents + Oncles/Tantes
+            if (relations.parents.length > 0 || relations.unclesAunts.length > 0) {
+                const parentsAndUncles = [...relations.parents, ...relations.unclesAunts];
+                html += `
+                    <div class="tree-level">
+                        <span class="tree-level-label">Parents</span>
+                        ${createTreeLevel(parentsAndUncles)}
+                    </div>
+                    <div class="vertical-line"></div>
+                `;
+            }
+
+            // Niveau 3: Personne centrale + Conjoint + Frères/Sœurs + Cousins
+            const siblingsAndCousins = [...relations.siblings, ...relations.cousins];
+            html += `
+                <div class="tree-level">
+                    <span class="tree-level-label">Moi</span>
+                    <div class="tree-row single" style="gap: 40px;">
+                        ${siblingsAndCousins.length > 0 ? `
+                            <div style="display: flex; gap: 15px;">
+                                ${siblingsAndCousins.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
+                            </div>
+                        ` : ''}
+                        <div style="display: flex; gap: 20px; align-items: center;">
+                            ${createPersonCard(centerMember, null, true)}
+                            ${relations.spouse.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
                         </div>
-                        ${relationsHtml}
+                    </div>
+                </div>
+            `;
+
+            // Niveau 4: Enfants
+            if (relations.children.length > 0) {
+                html += `
+                    <div class="vertical-line"></div>
+                    <div class="tree-level">
+                        <span class="tree-level-label">Enfants</span>
+                        ${createTreeLevel(relations.children)}
                     </div>
                 `;
-            }).join('');
+            }
+
+            // Niveau 5: Petits-enfants
+            if (relations.grandchildren.length > 0) {
+                html += `
+                    <div class="vertical-line"></div>
+                    <div class="tree-level">
+                        <span class="tree-level-label">Petits-enfants</span>
+                        ${createTreeLevel(relations.grandchildren)}
+                    </div>
+                `;
+            }
+
+            // Autres relations
+            if (relations.other.length > 0) {
+                html += `
+                    <div class="vertical-line"></div>
+                    <div class="tree-level">
+                        <span class="tree-level-label">Autres</span>
+                        ${createTreeLevel(relations.other)}
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
         }
 
         // Ajouter un membre
@@ -697,7 +993,6 @@
             const relationType = form.relationType.value;
 
             try {
-                // Ajouter le membre
                 const { data: newMember, error: memberError } = await supabaseClient
                     .from('family_members')
                     .insert([memberData])
@@ -706,58 +1001,53 @@
 
                 if (memberError) throw memberError;
 
-                // Ajouter la relation si spécifiée
                 if (relatedPersonId && relationType) {
-                    const relationData = {
-                        member_id: newMember.id,
-                        related_member_id: relatedPersonId,
-                        relation_type: relationType
-                    };
-
-                    const { error: relationError } = await supabaseClient
+                    await supabaseClient
                         .from('family_relations')
-                        .insert([relationData]);
-
-                    if (relationError) {
-                        console.error('Erreur relation:', relationError);
-                    }
+                        .insert([{
+                            member_id: newMember.id,
+                            related_member_id: relatedPersonId,
+                            relation_type: relationType
+                        }]);
                 }
 
-                showMessage(`${memberData.prenom} a été ajouté(e) à la famille ! 🎉`, 'success');
+                showMessage(`${memberData.prenom} a été ajouté(e) ! 🎉`, 'success');
                 form.reset();
+
+                // Sélectionner le nouveau membre
+                selectedMemberId = newMember.id;
                 await loadFamilyMembers();
             } catch (error) {
-                console.error('Erreur lors de l\'ajout:', error);
-                showMessage('Erreur lors de l\'ajout. Vérifie la connexion.', 'error');
+                console.error('Erreur:', error);
+                showMessage('Erreur lors de l\'ajout', 'error');
             }
         }
 
         // Supprimer un membre
         async function deleteMember(id) {
             const member = familyMembers.find(m => m.id === id);
-            if (!confirm(`Es-tu sûr de vouloir supprimer ${member.prenom} de l'arbre ?`)) {
-                return;
-            }
+            if (!confirm(`Supprimer ${member.prenom} de l'arbre ?`)) return;
 
             try {
-                // Supprimer d'abord les relations
                 await supabaseClient
                     .from('family_relations')
                     .delete()
                     .or(`member_id.eq.${id},related_member_id.eq.${id}`);
 
-                // Puis supprimer le membre
-                const { error } = await supabaseClient
+                await supabaseClient
                     .from('family_members')
                     .delete()
                     .eq('id', id);
 
-                if (error) throw error;
+                showMessage(`${member.prenom} a été retiré(e)`, 'success');
 
-                showMessage(`${member.prenom} a été retiré(e) de l'arbre`, 'success');
+                if (selectedMemberId === id) {
+                    selectedMemberId = null;
+                }
+
                 await loadFamilyMembers();
             } catch (error) {
-                console.error('Erreur lors de la suppression:', error);
+                console.error('Erreur:', error);
                 showMessage('Erreur lors de la suppression', 'error');
             }
         }
