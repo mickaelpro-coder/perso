@@ -862,7 +862,7 @@
                     </div>
                     <div class="form-group">
                         <label for="dateNaissance">Date de naissance (optionnel)</label>
-                        <input type="date" id="dateNaissance" name="dateNaissance">
+                        <input type="text" id="dateNaissance" name="dateNaissance" placeholder="Ex: 1985 ou 15/03/1985">
                     </div>
                     <div class="form-group">
                         <label for="sexe">Sexe</label>
@@ -933,7 +933,7 @@
                         </div>
                         <div class="edit-form-group">
                             <label for="editDateNaissance">Date de naissance (optionnel)</label>
-                            <input type="date" id="editDateNaissance">
+                            <input type="text" id="editDateNaissance" placeholder="Ex: 1985">
                         </div>
                         <div class="edit-form-group">
                             <label for="editSexe">Sexe</label>
@@ -1021,11 +1021,29 @@
         function calculateAge(birthDate) {
             if (!birthDate) return null;
             const today = new Date();
-            const birth = new Date(birthDate);
-            let age = today.getFullYear() - birth.getFullYear();
-            const monthDiff = today.getMonth() - birth.getMonth();
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) age--;
-            return age;
+            let birthYear;
+
+            // Si c'est juste une année (ex: "1985")
+            if (/^\d{4}$/.test(birthDate.trim())) {
+                birthYear = parseInt(birthDate.trim());
+            }
+            // Si c'est au format JJ/MM/AAAA ou DD/MM/YYYY
+            else if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(birthDate.trim())) {
+                const parts = birthDate.trim().split('/');
+                birthYear = parseInt(parts[2]);
+            }
+            // Si c'est au format AAAA-MM-JJ (ISO)
+            else if (/^\d{4}-\d{2}-\d{2}$/.test(birthDate.trim())) {
+                birthYear = parseInt(birthDate.trim().split('-')[0]);
+            }
+            // Sinon, essayer de parser comme date
+            else {
+                const birth = new Date(birthDate);
+                if (isNaN(birth.getTime())) return null;
+                birthYear = birth.getFullYear();
+            }
+
+            return today.getFullYear() - birthYear;
         }
 
         // Obtenir l'avatar
