@@ -1256,39 +1256,37 @@
 
             let html = '';
 
-            // Génération 1: Grands-parents
-            html += `
-                <div class="tree-level-wrapper">
-                    <div class="generation-header">
-                        <span class="gen-emoji">👴👵</span>Grands-parents
+            // Génération 1: Grands-parents (seulement s'il y en a)
+            if (relations.grandparents.length > 0) {
+                html += `
+                    <div class="tree-level-wrapper">
+                        <div class="generation-header">
+                            <span class="gen-emoji">👴👵</span>Grands-parents
+                        </div>
+                        <div class="tree-level">
+                            ${createTreeLevel(relations.grandparents)}
+                        </div>
                     </div>
-                    <div class="tree-level">
-                        ${relations.grandparents.length > 0
-                            ? createTreeLevel(relations.grandparents)
-                            : '<div class="empty-level">Pas encore de grands-parents</div>'
-                        }
-                    </div>
-                </div>
-                <div class="vertical-line"></div>
-            `;
+                    <div class="vertical-line"></div>
+                `;
+            }
 
-            // Génération 2: Parents
-            html += `
-                <div class="tree-level-wrapper">
-                    <div class="generation-header">
-                        <span class="gen-emoji">👨👩</span>Parents
+            // Génération 2: Parents (seulement s'il y en a)
+            if (relations.parents.length > 0) {
+                html += `
+                    <div class="tree-level-wrapper">
+                        <div class="generation-header">
+                            <span class="gen-emoji">👨👩</span>Parents
+                        </div>
+                        <div class="tree-level">
+                            ${createTreeLevel(relations.parents)}
+                        </div>
                     </div>
-                    <div class="tree-level">
-                        ${relations.parents.length > 0
-                            ? createTreeLevel(relations.parents)
-                            : '<div class="empty-level">Pas encore de parents</div>'
-                        }
-                    </div>
-                </div>
-                <div class="vertical-line"></div>
-            `;
+                    <div class="vertical-line"></div>
+                `;
+            }
 
-            // Génération 3: Moi + Conjoint + Frères/Sœurs
+            // Génération 3: Moi + Conjoint + Frères/Sœurs (toujours affiché)
             const siblingsAndCousins = [...relations.siblings, ...relations.cousins];
             html += `
                 <div class="tree-level-wrapper">
@@ -1309,39 +1307,37 @@
                         </div>
                     </div>
                 </div>
-                <div class="vertical-line"></div>
             `;
 
-            // Génération 4: Enfants
-            html += `
-                <div class="tree-level-wrapper">
-                    <div class="generation-header">
-                        <span class="gen-emoji">👦👧</span>Enfants
+            // Génération 4: Enfants (seulement s'il y en a)
+            if (relations.children.length > 0) {
+                html += `
+                    <div class="vertical-line"></div>
+                    <div class="tree-level-wrapper">
+                        <div class="generation-header">
+                            <span class="gen-emoji">👦👧</span>Enfants
+                        </div>
+                        <div class="tree-level">
+                            ${createTreeLevel(relations.children)}
+                        </div>
                     </div>
-                    <div class="tree-level">
-                        ${relations.children.length > 0
-                            ? createTreeLevel(relations.children)
-                            : '<div class="empty-level">Pas encore d\'enfants</div>'
-                        }
-                    </div>
-                </div>
-                <div class="vertical-line"></div>
-            `;
+                `;
+            }
 
-            // Génération 5: Petits-enfants
-            html += `
-                <div class="tree-level-wrapper">
-                    <div class="generation-header">
-                        <span class="gen-emoji">👶</span>Petits-enfants
+            // Génération 5: Petits-enfants (seulement s'il y en a)
+            if (relations.grandchildren.length > 0) {
+                html += `
+                    <div class="vertical-line"></div>
+                    <div class="tree-level-wrapper">
+                        <div class="generation-header">
+                            <span class="gen-emoji">👶</span>Petits-enfants
+                        </div>
+                        <div class="tree-level">
+                            ${createTreeLevel(relations.grandchildren)}
+                        </div>
                     </div>
-                    <div class="tree-level">
-                        ${relations.grandchildren.length > 0
-                            ? createTreeLevel(relations.grandchildren)
-                            : '<div class="empty-level">Pas encore de petits-enfants</div>'
-                        }
-                    </div>
-                </div>
-            `;
+                `;
+            }
 
             // Autres relations (oncles, tantes, cousins)
             if (relations.unclesAunts.length > 0 || relations.other.length > 0) {
