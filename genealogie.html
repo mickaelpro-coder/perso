@@ -16,7 +16,7 @@
         body {
             background: linear-gradient(135deg, #a8e6cf 0%, #88d8b0 50%, #ffeaa7 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px;
         }
 
         .container {
@@ -27,45 +27,45 @@
         h1 {
             text-align: center;
             color: #e17055;
-            font-size: 2.5em;
-            text-shadow: 3px 3px 0px #fdcb6e;
-            margin-bottom: 30px;
+            font-size: 1.8em;
+            text-shadow: 2px 2px 0px #fdcb6e;
+            margin-bottom: 15px;
             animation: bounce 2s infinite;
         }
 
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-5px); }
         }
 
         .tree-icon {
-            font-size: 3em;
+            font-size: 2em;
             display: block;
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
         /* Formulaire */
         .form-container {
             background: white;
-            border-radius: 30px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-            border: 5px dashed #74b9ff;
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+            border: 3px dashed #74b9ff;
         }
 
         .form-title {
             color: #6c5ce7;
             text-align: center;
-            margin-bottom: 20px;
-            font-size: 1.5em;
+            margin-bottom: 12px;
+            font-size: 1.2em;
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
         }
 
         .form-group {
@@ -75,15 +75,15 @@
 
         label {
             color: #e17055;
-            font-size: 1.1em;
-            margin-bottom: 8px;
+            font-size: 0.85em;
+            margin-bottom: 4px;
         }
 
         input, select {
-            padding: 15px;
-            border: 3px solid #dfe6e9;
-            border-radius: 15px;
-            font-size: 1em;
+            padding: 8px;
+            border: 2px solid #dfe6e9;
+            border-radius: 10px;
+            font-size: 0.85em;
             font-family: inherit;
             transition: all 0.3s ease;
         }
@@ -91,52 +91,52 @@
         input:focus, select:focus {
             outline: none;
             border-color: #74b9ff;
-            box-shadow: 0 0 15px rgba(116, 185, 255, 0.5);
+            box-shadow: 0 0 10px rgba(116, 185, 255, 0.5);
         }
 
         .relation-section {
             grid-column: 1 / -1;
             background: #f8f9fa;
-            border-radius: 20px;
-            padding: 20px;
-            margin-top: 10px;
+            border-radius: 12px;
+            padding: 10px;
+            margin-top: 8px;
         }
 
         .relation-title {
             color: #6c5ce7;
-            font-size: 1.1em;
-            margin-bottom: 15px;
+            font-size: 0.9em;
+            margin-bottom: 8px;
             text-align: center;
         }
 
         .relation-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px;
         }
 
         .btn {
             background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
             color: white;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.2em;
-            border-radius: 25px;
+            padding: 10px 25px;
+            font-size: 0.95em;
+            border-radius: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-family: inherit;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         .btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(232, 67, 147, 0.4);
+            box-shadow: 0 3px 15px rgba(232, 67, 147, 0.4);
         }
 
         .btn-small {
-            padding: 8px 20px;
-            font-size: 0.9em;
-            margin: 5px;
+            padding: 6px 15px;
+            font-size: 0.8em;
+            margin: 3px;
         }
 
         .btn-secondary {
@@ -151,26 +151,26 @@
         /* Arbre généalogique */
         .tree-container {
             background: white;
-            border-radius: 30px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: 5px dashed #00b894;
-            min-height: 500px;
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 3px dashed #00b894;
+            min-height: 400px;
             overflow-x: auto;
         }
 
         .tree-title {
             color: #00b894;
             text-align: center;
-            margin-bottom: 10px;
-            font-size: 1.5em;
+            margin-bottom: 5px;
+            font-size: 1.2em;
         }
 
         .tree-subtitle {
             text-align: center;
             color: #636e72;
-            margin-bottom: 20px;
-            font-size: 0.9em;
+            margin-bottom: 10px;
+            font-size: 0.75em;
         }
 
         /* Structure de l'arbre */
@@ -178,8 +178,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
-            padding: 20px;
+            gap: 12px;
+            padding: 10px;
             min-width: fit-content;
         }
 
@@ -187,75 +187,76 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            gap: 30px;
+            gap: 15px;
             position: relative;
         }
 
         .tree-level-label {
             position: absolute;
-            left: -120px;
+            left: -100px;
             top: 50%;
             transform: translateY(-50%);
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 8px 15px;
-            border-radius: 15px;
-            font-size: 0.75em;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.65em;
             white-space: nowrap;
-            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
             text-align: center;
-            min-width: 100px;
+            min-width: 80px;
         }
 
         .tree-level-label .level-emoji {
             display: block;
-            font-size: 1.5em;
-            margin-bottom: 2px;
+            font-size: 1.2em;
+            margin-bottom: 1px;
         }
 
         .generation-header {
             text-align: center;
-            margin-bottom: 10px;
-            padding: 10px 20px;
+            margin-bottom: 6px;
+            padding: 5px 12px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border-radius: 20px;
-            font-size: 1em;
+            border-radius: 12px;
+            font-size: 0.8em;
             display: inline-block;
         }
 
         .generation-header .gen-emoji {
-            margin-right: 8px;
+            margin-right: 5px;
         }
 
         .tree-level-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
 
         .empty-level {
             color: #b2bec3;
             font-style: italic;
-            padding: 15px 30px;
+            padding: 8px 15px;
             background: #f8f9fa;
-            border-radius: 15px;
+            border-radius: 10px;
             border: 2px dashed #dfe6e9;
+            font-size: 0.8em;
         }
 
         /* Cartes des personnes */
         .person-card {
             background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-            border-radius: 20px;
-            padding: 15px;
+            border-radius: 12px;
+            padding: 8px;
             text-align: center;
-            min-width: 140px;
-            max-width: 160px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            min-width: 90px;
+            max-width: 110px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
             position: relative;
-            border: 3px solid;
+            border: 2px solid;
             cursor: pointer;
         }
 
@@ -268,14 +269,14 @@
         }
 
         .person-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
         }
 
         .person-card.center {
-            border-width: 5px;
-            transform: scale(1.1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            border-width: 3px;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
             z-index: 10;
         }
 
@@ -290,44 +291,44 @@
         }
 
         .person-avatar {
-            font-size: 2.5em;
-            margin-bottom: 8px;
+            font-size: 1.8em;
+            margin-bottom: 4px;
         }
 
         .person-name {
-            font-size: 1em;
+            font-size: 0.75em;
             color: #2d3436;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
             font-weight: bold;
         }
 
         .person-birth {
             color: #636e72;
-            font-size: 0.75em;
+            font-size: 0.65em;
         }
 
         .person-relation-label {
             background: #6c5ce7;
             color: white;
-            padding: 3px 10px;
-            border-radius: 10px;
-            font-size: 0.7em;
-            margin-top: 8px;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 0.6em;
+            margin-top: 4px;
             display: inline-block;
         }
 
         .delete-btn {
             position: absolute;
-            top: 5px;
-            right: 5px;
+            top: 2px;
+            right: 2px;
             background: #ff7675;
             color: white;
             border: none;
-            width: 24px;
-            height: 24px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 0.8em;
+            font-size: 0.65em;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
@@ -372,9 +373,9 @@
         .tree-group::before {
             content: '';
             position: absolute;
-            top: -20px;
-            width: 3px;
-            height: 20px;
+            top: -12px;
+            width: 2px;
+            height: 12px;
             background: #b2bec3;
         }
 
@@ -384,18 +385,18 @@
 
         .tree-row {
             display: flex;
-            gap: 20px;
+            gap: 10px;
             position: relative;
         }
 
         .tree-row::before {
             content: '';
             position: absolute;
-            top: -10px;
+            top: -6px;
             left: 50%;
             transform: translateX(-50%);
-            width: calc(100% - 140px);
-            height: 3px;
+            width: calc(100% - 90px);
+            height: 2px;
             background: #b2bec3;
         }
 
@@ -406,23 +407,23 @@
         .tree-row > .person-card::before {
             content: '';
             position: absolute;
-            top: -10px;
+            top: -6px;
             left: 50%;
             transform: translateX(-50%);
-            width: 3px;
-            height: 10px;
+            width: 2px;
+            height: 6px;
             background: #b2bec3;
         }
 
         .vertical-line {
-            width: 3px;
-            height: 30px;
+            width: 2px;
+            height: 15px;
             background: #b2bec3;
             margin: 0 auto;
         }
 
         .horizontal-line {
-            height: 3px;
+            height: 2px;
             background: #b2bec3;
             position: absolute;
         }
@@ -430,33 +431,33 @@
         /* Section de sélection des membres */
         .members-list {
             background: #f8f9fa;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
+            border-radius: 15px;
+            padding: 12px;
+            margin-bottom: 12px;
         }
 
         .members-list-title {
             color: #6c5ce7;
             text-align: center;
-            margin-bottom: 15px;
-            font-size: 1.1em;
+            margin-bottom: 8px;
+            font-size: 0.9em;
         }
 
         .members-chips {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 6px;
             justify-content: center;
         }
 
         .member-chip {
             background: white;
             border: 2px solid #dfe6e9;
-            padding: 8px 15px;
-            border-radius: 20px;
+            padding: 4px 10px;
+            border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.9em;
+            font-size: 0.75em;
         }
 
         .member-chip:hover {
@@ -471,41 +472,70 @@
         }
 
         .member-chip .chip-avatar {
-            margin-right: 5px;
+            margin-right: 3px;
+        }
+
+        /* Groupes par lettre */
+        .letter-group {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .letter-header {
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.85em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 6px;
+        }
+
+        .letter-members {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: flex-start;
+        }
+
+        body.professional .letter-header {
+            background: #34495e;
+            border-radius: 4px;
         }
 
         /* Section de gestion des liens */
         .relations-manager {
             background: #fff3e0;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 3px solid #ffcc80;
+            border-radius: 15px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 2px solid #ffcc80;
         }
 
         .relations-manager-title {
             color: #e65100;
             text-align: center;
-            margin-bottom: 15px;
-            font-size: 1.1em;
+            margin-bottom: 8px;
+            font-size: 0.9em;
         }
 
         .relations-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 6px;
             justify-content: center;
         }
 
         .relation-item {
             background: white;
-            border: 2px solid #ffcc80;
-            padding: 8px 12px;
-            border-radius: 15px;
+            border: 1px solid #ffcc80;
+            padding: 4px 8px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.85em;
+            gap: 5px;
+            font-size: 0.7em;
             transition: all 0.3s ease;
         }
 
@@ -521,20 +551,20 @@
         .relation-item .relation-type {
             background: #6c5ce7;
             color: white;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.8em;
+            padding: 1px 5px;
+            border-radius: 6px;
+            font-size: 0.75em;
         }
 
         .relation-delete-btn {
             background: #ff7675;
             color: white;
             border: none;
-            width: 22px;
-            height: 22px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 0.75em;
+            font-size: 0.6em;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -550,27 +580,29 @@
             color: #9e9e9e;
             text-align: center;
             font-style: italic;
+            font-size: 0.8em;
         }
 
         /* Formulaire d'ajout de lien */
         .add-relation-form {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 2px dashed #ffcc80;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #ffcc80;
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 6px;
             align-items: center;
             justify-content: center;
+            font-size: 0.8em;
         }
 
         .add-relation-form select {
-            padding: 10px;
-            border: 2px solid #ffcc80;
-            border-radius: 12px;
-            font-size: 0.9em;
+            padding: 6px;
+            border: 1px solid #ffcc80;
+            border-radius: 8px;
+            font-size: 0.85em;
             font-family: inherit;
-            min-width: 150px;
+            min-width: 120px;
         }
 
         .add-relation-form select:focus {
@@ -582,9 +614,9 @@
             background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
             color: white;
             border: none;
-            padding: 10px 20px;
-            font-size: 0.9em;
-            border-radius: 15px;
+            padding: 6px 12px;
+            font-size: 0.8em;
+            border-radius: 10px;
             cursor: pointer;
             font-family: inherit;
             transition: all 0.3s ease;
@@ -592,7 +624,7 @@
 
         .btn-add-relation:hover {
             transform: scale(1.05);
-            box-shadow: 0 3px 10px rgba(67, 160, 71, 0.4);
+            box-shadow: 0 2px 8px rgba(67, 160, 71, 0.4);
         }
 
         .btn-add-relation:disabled {
@@ -604,15 +636,16 @@
 
         /* Messages */
         .message {
-            padding: 15px 25px;
-            border-radius: 15px;
-            margin-bottom: 20px;
+            padding: 8px 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
             text-align: center;
             animation: fadeIn 0.5s ease;
+            font-size: 0.85em;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
+            from { opacity: 0; transform: translateY(-5px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -629,23 +662,23 @@
         /* Formulaire de modification */
         .edit-form {
             background: #e8f5e9;
-            border: 2px solid #81c784;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 15px;
+            border: 1px solid #81c784;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
         }
 
         .edit-form-title {
             color: #2e7d32;
-            font-size: 1em;
-            margin-bottom: 10px;
+            font-size: 0.85em;
+            margin-bottom: 6px;
             text-align: center;
         }
 
         .edit-form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 6px;
         }
 
         .edit-form-group {
@@ -654,17 +687,17 @@
         }
 
         .edit-form-group label {
-            font-size: 0.85em;
+            font-size: 0.7em;
             color: #2e7d32;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .edit-form-group input,
         .edit-form-group select {
-            padding: 8px;
-            border: 2px solid #a5d6a7;
-            border-radius: 10px;
-            font-size: 0.9em;
+            padding: 5px;
+            border: 1px solid #a5d6a7;
+            border-radius: 6px;
+            font-size: 0.8em;
             font-family: inherit;
         }
 
@@ -676,37 +709,37 @@
 
         .edit-buttons {
             display: flex;
-            gap: 10px;
+            gap: 6px;
             justify-content: center;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         .btn-save {
             background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
             color: white;
             border: none;
-            padding: 8px 20px;
-            border-radius: 12px;
+            padding: 5px 12px;
+            border-radius: 8px;
             cursor: pointer;
             font-family: inherit;
-            font-size: 0.9em;
+            font-size: 0.75em;
             transition: all 0.3s ease;
         }
 
         .btn-save:hover {
             transform: scale(1.05);
-            box-shadow: 0 3px 10px rgba(67, 160, 71, 0.4);
+            box-shadow: 0 2px 8px rgba(67, 160, 71, 0.4);
         }
 
         .btn-cancel {
             background: #bdbdbd;
             color: white;
             border: none;
-            padding: 8px 20px;
-            border-radius: 12px;
+            padding: 5px 12px;
+            border-radius: 8px;
             cursor: pointer;
             font-family: inherit;
-            font-size: 0.9em;
+            font-size: 0.75em;
             transition: all 0.3s ease;
         }
 
@@ -719,9 +752,9 @@
             display: flex;
             align-items: center;
             cursor: pointer;
-            font-size: 1em;
+            font-size: 0.8em;
             color: #636e72;
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
         .checkbox-label input[type="checkbox"] {
@@ -729,16 +762,17 @@
         }
 
         .checkbox-custom {
-            width: 24px;
-            height: 24px;
-            border: 3px solid #dfe6e9;
-            border-radius: 8px;
-            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #dfe6e9;
+            border-radius: 5px;
+            margin-right: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
             background: white;
+            font-size: 0.7em;
         }
 
         .checkbox-label input[type="checkbox"]:checked + .checkbox-custom {
@@ -771,32 +805,32 @@
         }
 
         .deceased-badge {
-            font-size: 0.7em;
+            font-size: 0.55em;
             color: #636e72;
-            margin-top: 3px;
+            margin-top: 2px;
         }
 
         .no-members {
             text-align: center;
             color: #b2bec3;
-            font-size: 1.2em;
-            padding: 50px;
+            font-size: 0.9em;
+            padding: 30px;
         }
 
         .no-members span {
-            font-size: 3em;
+            font-size: 2em;
             display: block;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .loading {
             text-align: center;
-            padding: 50px;
+            padding: 30px;
             color: #6c5ce7;
         }
 
         .loading-spinner {
-            font-size: 3em;
+            font-size: 2em;
             animation: spin 1s linear infinite;
             display: inline-block;
         }
@@ -809,7 +843,7 @@
         /* Responsive */
         @media (max-width: 768px) {
             h1 {
-                font-size: 1.8em;
+                font-size: 1.4em;
             }
 
             .form-grid, .relation-grid {
@@ -817,21 +851,21 @@
             }
 
             .person-card {
-                min-width: 110px;
-                max-width: 130px;
-                padding: 10px;
+                min-width: 80px;
+                max-width: 100px;
+                padding: 6px;
             }
 
             .person-avatar {
-                font-size: 2em;
+                font-size: 1.5em;
             }
 
             .person-name {
-                font-size: 0.85em;
+                font-size: 0.65em;
             }
 
             .tree-level {
-                gap: 15px;
+                gap: 8px;
             }
 
             .tree-level-label {
@@ -842,17 +876,17 @@
         /* Bouton de bascule */
         .toggle-mode {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 10px;
+            right: 10px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 25px;
+            padding: 8px 12px;
+            border-radius: 15px;
             cursor: pointer;
             font-family: inherit;
-            font-size: 0.9em;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            font-size: 0.75em;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.4);
             transition: all 0.3s ease;
             z-index: 1000;
         }
@@ -1134,14 +1168,14 @@
                 <!-- Formulaire pour ajouter un nouveau lien -->
                 <div class="add-relation-form">
                     <span style="color: #e65100;">Ajouter un lien :</span>
-                    <select id="newRelatedPerson">
-                        <option value="">Personne...</option>
-                    </select>
                     <select id="newRelationType">
                         <option value="">Type de lien...</option>
                         <option value="pere">Est le père</option>
                         <option value="mere">Est la mère</option>
                         <option value="conjoint">Est le/la conjoint(e)</option>
+                    </select>
+                    <select id="newRelatedPerson">
+                        <option value="">Personne...</option>
                     </select>
                     <button type="button" class="btn-add-relation" onclick="addNewRelation()">+ Ajouter</button>
                 </div>
@@ -1512,13 +1546,36 @@
                 return nameA.localeCompare(nameB, 'fr');
             });
 
-            container.innerHTML = sortedMembers.map(member => `
-                <div class="member-chip ${selectedMemberId === member.id ? 'active' : ''}"
-                     onclick="selectMember('${member.id}')">
-                    <span class="chip-avatar">${getAvatar(member.sexe, member.date_naissance)}</span>
-                    ${member.prenom} ${member.nom}
-                </div>
-            `).join('');
+            // Regrouper par première lettre du prénom
+            const groups = {};
+            sortedMembers.forEach(member => {
+                const firstLetter = member.prenom.charAt(0).toUpperCase();
+                if (!groups[firstLetter]) {
+                    groups[firstLetter] = [];
+                }
+                groups[firstLetter].push(member);
+            });
+
+            // Générer le HTML avec les groupes
+            let html = '';
+            Object.keys(groups).sort((a, b) => a.localeCompare(b, 'fr')).forEach(letter => {
+                html += `
+                    <div class="letter-group">
+                        <div class="letter-header">${letter}</div>
+                        <div class="letter-members">
+                            ${groups[letter].map(member => `
+                                <div class="member-chip ${selectedMemberId === member.id ? 'active' : ''}"
+                                     onclick="selectMember('${member.id}')">
+                                    <span class="chip-avatar">${getAvatar(member.sexe, member.date_naissance)}</span>
+                                    ${member.prenom} ${member.nom}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
         }
 
         // Sélectionner un membre
