@@ -798,6 +798,9 @@
                 <!-- Formulaire pour ajouter un nouveau lien -->
                 <div class="add-relation-form">
                     <span style="color: #e65100;">Ajouter un lien :</span>
+                    <select id="newRelatedPerson">
+                        <option value="">Personne...</option>
+                    </select>
                     <select id="newRelationType">
                         <option value="">Type de lien...</option>
                         <optgroup label="Parents">
@@ -831,9 +834,6 @@
                             <option value="cousin">Est le cousin de</option>
                             <option value="cousine">Est la cousine de</option>
                         </optgroup>
-                    </select>
-                    <select id="newRelatedPerson">
-                        <option value="">Personne...</option>
                     </select>
                     <button type="button" class="btn-add-relation" onclick="addNewRelation()">+ Ajouter</button>
                 </div>
