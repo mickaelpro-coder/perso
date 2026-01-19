@@ -474,6 +474,35 @@
             margin-right: 5px;
         }
 
+        /* Groupes par lettre */
+        .letter-group {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .letter-header {
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .letter-members {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+
+        body.professional .letter-header {
+            background: #34495e;
+            border-radius: 6px;
+        }
+
         /* Section de gestion des liens */
         .relations-manager {
             background: #fff3e0;
@@ -1512,13 +1541,36 @@
                 return nameA.localeCompare(nameB, 'fr');
             });
 
-            container.innerHTML = sortedMembers.map(member => `
-                <div class="member-chip ${selectedMemberId === member.id ? 'active' : ''}"
-                     onclick="selectMember('${member.id}')">
-                    <span class="chip-avatar">${getAvatar(member.sexe, member.date_naissance)}</span>
-                    ${member.prenom} ${member.nom}
-                </div>
-            `).join('');
+            // Regrouper par première lettre du prénom
+            const groups = {};
+            sortedMembers.forEach(member => {
+                const firstLetter = member.prenom.charAt(0).toUpperCase();
+                if (!groups[firstLetter]) {
+                    groups[firstLetter] = [];
+                }
+                groups[firstLetter].push(member);
+            });
+
+            // Générer le HTML avec les groupes
+            let html = '';
+            Object.keys(groups).sort((a, b) => a.localeCompare(b, 'fr')).forEach(letter => {
+                html += `
+                    <div class="letter-group">
+                        <div class="letter-header">${letter}</div>
+                        <div class="letter-members">
+                            ${groups[letter].map(member => `
+                                <div class="member-chip ${selectedMemberId === member.id ? 'active' : ''}"
+                                     onclick="selectMember('${member.id}')">
+                                    <span class="chip-avatar">${getAvatar(member.sexe, member.date_naissance)}</span>
+                                    ${member.prenom} ${member.nom}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
         }
 
         // Sélectionner un membre
