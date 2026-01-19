@@ -896,6 +896,33 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
         }
 
+        .btn-children {
+            position: fixed;
+            top: 10px;
+            right: 240px;
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.75em;
+            box-shadow: 0 3px 10px rgba(0, 184, 148, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .btn-children:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 184, 148, 0.5);
+        }
+
+        body.professional .btn-children {
+            background: #16a085;
+            border-radius: 6px;
+        }
+
         .btn-singles {
             position: fixed;
             top: 10px;
@@ -1165,8 +1192,18 @@
     </style>
 </head>
 <body>
+    <button class="btn-children" onclick="showChildren()">👶 Enfants</button>
     <button class="btn-singles" onclick="showSingles()">💔 Sans conjoint</button>
     <button class="toggle-mode" onclick="toggleMode()">🎨 Mode Pro</button>
+
+    <!-- Modal des enfants -->
+    <div id="childrenModal" class="singles-modal" onclick="closeChildrenModal(event)">
+        <div class="singles-content" onclick="event.stopPropagation()">
+            <h3 class="singles-title" style="color: #00b894;">👶 Enfants (moins de 18 ans)</h3>
+            <div id="childrenList" class="singles-list"></div>
+            <button class="singles-close" onclick="closeChildrenModal()">Fermer</button>
+        </div>
+    </div>
 
     <!-- Modal des adultes sans conjoint -->
     <div id="singlesModal" class="singles-modal" onclick="closeSinglesModal(event)">
@@ -1415,6 +1452,56 @@
         function closeSinglesModal(event) {
             if (event && event.target !== event.currentTarget) return;
             document.getElementById('singlesModal').classList.remove('show');
+        }
+
+        // Afficher les enfants (< 18 ans)
+        function showChildren() {
+            const modal = document.getElementById('childrenModal');
+            const list = document.getElementById('childrenList');
+
+            // Trouver les enfants (< 18 ans)
+            const children = familyMembers.filter(member => {
+                const age = calculateAge(member.date_naissance);
+                if (age === null) return false;
+                if (member.decede) return false;
+                return age < 18;
+            });
+
+            // Trier par nom
+            children.sort((a, b) => {
+                const nameA = `${a.prenom} ${a.nom}`.toLowerCase();
+                const nameB = `${b.prenom} ${b.nom}`.toLowerCase();
+                return nameA.localeCompare(nameB, 'fr');
+            });
+
+            if (children.length === 0) {
+                list.innerHTML = '<div class="no-singles">Aucun enfant de moins de 18 ans</div>';
+            } else {
+                list.innerHTML = children.map(member => {
+                    const age = calculateAge(member.date_naissance);
+                    return `
+                        <div class="single-item" onclick="selectMemberAndCloseChildren('${member.id}')">
+                            <span>${getAvatar(member.sexe, member.date_naissance)}</span>
+                            <span>${member.prenom} ${member.nom}</span>
+                            <span class="age">(${age} ans)</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            modal.classList.add('show');
+        }
+
+        // Sélectionner un membre et fermer la modal enfants
+        function selectMemberAndCloseChildren(memberId) {
+            closeChildrenModal();
+            selectMember(memberId);
+        }
+
+        // Fermer la modal enfants
+        function closeChildrenModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('childrenModal').classList.remove('show');
         }
 
         // Labels pour l'affichage
