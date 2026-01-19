@@ -724,49 +724,18 @@
                     </div>
 
                     <div class="relation-section">
-                        <div class="relation-title">Lien avec un membre existant (optionnel)</div>
+                        <div class="relation-title">Parents (optionnel)</div>
                         <div class="relation-grid">
                             <div class="form-group">
-                                <label for="relatedPerson">Personne liée</label>
-                                <select id="relatedPerson" name="relatedPerson">
-                                    <option value="">Aucune personne</option>
+                                <label for="pereId">👨 Père</label>
+                                <select id="pereId" name="pereId">
+                                    <option value="">Aucun père</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="relationType">Type de lien</label>
-                                <select id="relationType" name="relationType">
-                                    <option value="">Choisir le lien...</option>
-                                    <optgroup label="Parents">
-                                        <option value="pere">Est le père de</option>
-                                        <option value="mere">Est la mère de</option>
-                                        <option value="beau-pere">Est le beau-père de</option>
-                                        <option value="belle-mere">Est la belle-mère de</option>
-                                    </optgroup>
-                                    <optgroup label="Enfants">
-                                        <option value="fils">Est le fils de</option>
-                                        <option value="fille">Est la fille de</option>
-                                    </optgroup>
-                                    <optgroup label="Frères et Sœurs">
-                                        <option value="frere">Est le frère de</option>
-                                        <option value="soeur">Est la sœur de</option>
-                                        <option value="demi-frere">Est le demi-frère de</option>
-                                        <option value="demi-soeur">Est la demi-sœur de</option>
-                                    </optgroup>
-                                    <optgroup label="Conjoint">
-                                        <option value="conjoint">Est le/la conjoint(e) de</option>
-                                    </optgroup>
-                                    <optgroup label="Grands-parents">
-                                        <option value="grand-pere">Est le grand-père de</option>
-                                        <option value="grand-mere">Est la grand-mère de</option>
-                                        <option value="petit-fils">Est le petit-fils de</option>
-                                        <option value="petite-fille">Est la petite-fille de</option>
-                                    </optgroup>
-                                    <optgroup label="Oncles/Tantes/Cousins">
-                                        <option value="oncle">Est l'oncle de</option>
-                                        <option value="tante">Est la tante de</option>
-                                        <option value="cousin">Est le cousin de</option>
-                                        <option value="cousine">Est la cousine de</option>
-                                    </optgroup>
+                                <label for="mereId">👩 Mère</label>
+                                <select id="mereId" name="mereId">
+                                    <option value="">Aucune mère</option>
                                 </select>
                             </div>
                         </div>
@@ -803,40 +772,15 @@
                     </select>
                     <select id="newRelationType">
                         <option value="">Type de lien...</option>
-                        <optgroup label="Parents">
-                            <option value="pere">Est le père de</option>
-                            <option value="mere">Est la mère de</option>
-                            <option value="beau-pere">Est le beau-père de</option>
-                            <option value="belle-mere">Est la belle-mère de</option>
-                        </optgroup>
-                        <optgroup label="Enfants">
-                            <option value="fils">Est le fils de</option>
-                            <option value="fille">Est la fille de</option>
-                        </optgroup>
-                        <optgroup label="Frères et Sœurs">
-                            <option value="frere">Est le frère de</option>
-                            <option value="soeur">Est la sœur de</option>
-                            <option value="demi-frere">Est le demi-frère de</option>
-                            <option value="demi-soeur">Est la demi-sœur de</option>
-                        </optgroup>
-                        <optgroup label="Conjoint">
-                            <option value="conjoint">Est le/la conjoint(e) de</option>
-                        </optgroup>
-                        <optgroup label="Grands-parents">
-                            <option value="grand-pere">Est le grand-père de</option>
-                            <option value="grand-mere">Est la grand-mère de</option>
-                            <option value="petit-fils">Est le petit-fils de</option>
-                            <option value="petite-fille">Est la petite-fille de</option>
-                        </optgroup>
-                        <optgroup label="Oncles/Tantes/Cousins">
-                            <option value="oncle">Est l'oncle de</option>
-                            <option value="tante">Est la tante de</option>
-                            <option value="cousin">Est le cousin de</option>
-                            <option value="cousine">Est la cousine de</option>
-                        </optgroup>
+                        <option value="pere">Est le père</option>
+                        <option value="mere">Est la mère</option>
+                        <option value="conjoint">Est le/la conjoint(e)</option>
                     </select>
                     <button type="button" class="btn-add-relation" onclick="addNewRelation()">+ Ajouter</button>
                 </div>
+                <p style="color: #9e9e9e; font-size: 0.8em; text-align: center; margin-top: 10px;">
+                    Les frères/sœurs, oncles/tantes, cousins et grands-parents sont calculés automatiquement !
+                </p>
             </div>
 
             <!-- Arbre généalogique -->
@@ -934,58 +878,139 @@
             return inverseMap[relationType] || relationType;
         }
 
-        // Obtenir les relations d'un membre avec catégorisation
+        // Trouver les parents d'une personne
+        function getParentsOf(personId) {
+            const parents = [];
+            familyRelations.forEach(rel => {
+                if (rel.related_member_id === personId && ['pere', 'mere'].includes(rel.relation_type)) {
+                    const parent = familyMembers.find(m => m.id === rel.member_id);
+                    if (parent) parents.push({ member: parent, type: rel.relation_type });
+                }
+            });
+            return parents;
+        }
+
+        // Trouver les enfants d'une personne
+        function getChildrenOf(personId) {
+            const children = [];
+            familyRelations.forEach(rel => {
+                if (rel.member_id === personId && ['pere', 'mere'].includes(rel.relation_type)) {
+                    const child = familyMembers.find(m => m.id === rel.related_member_id);
+                    if (child) {
+                        const type = child.sexe === 'M' ? 'fils' : 'fille';
+                        children.push({ member: child, type: type });
+                    }
+                }
+            });
+            return children;
+        }
+
+        // Obtenir les relations d'un membre avec calcul automatique
         function getMemberRelationsGrouped(memberId) {
             const relations = {
-                parents: [],      // père, mère, beau-père, belle-mère
-                grandparents: [], // grand-père, grand-mère
-                siblings: [],     // frère, sœur, demi-frère, demi-sœur
-                spouse: [],       // conjoint
-                children: [],     // fils, fille
-                grandchildren: [], // petit-fils, petite-fille
-                unclesAunts: [],  // oncle, tante
-                cousins: [],      // cousin, cousine
+                parents: [],
+                grandparents: [],
+                siblings: [],
+                spouse: [],
+                children: [],
+                grandchildren: [],
+                unclesAunts: [],
+                cousins: [],
                 other: []
             };
 
-            familyRelations.forEach(rel => {
-                let relatedId, relType;
+            const addedIds = new Set([memberId]);
 
-                if (rel.member_id === memberId) {
-                    relatedId = rel.related_member_id;
-                    relType = rel.relation_type;
-                } else if (rel.related_member_id === memberId) {
-                    relatedId = rel.member_id;
-                    relType = getInverseRelation(rel.relation_type, memberId);
-                } else {
-                    return;
+            // 1. Parents directs
+            const myParents = getParentsOf(memberId);
+            myParents.forEach(p => {
+                relations.parents.push(p);
+                addedIds.add(p.member.id);
+            });
+
+            // 2. Grands-parents (parents des parents)
+            myParents.forEach(parent => {
+                const grandparents = getParentsOf(parent.member.id);
+                grandparents.forEach(gp => {
+                    if (!addedIds.has(gp.member.id)) {
+                        const type = gp.member.sexe === 'M' ? 'grand-pere' : 'grand-mere';
+                        relations.grandparents.push({ member: gp.member, type: type });
+                        addedIds.add(gp.member.id);
+                    }
+                });
+            });
+
+            // 3. Frères et sœurs (enfants des mêmes parents)
+            myParents.forEach(parent => {
+                const siblings = getChildrenOf(parent.member.id);
+                siblings.forEach(sib => {
+                    if (!addedIds.has(sib.member.id)) {
+                        const type = sib.member.sexe === 'M' ? 'frere' : 'soeur';
+                        relations.siblings.push({ member: sib.member, type: type });
+                        addedIds.add(sib.member.id);
+                    }
+                });
+            });
+
+            // 4. Oncles et tantes (frères/sœurs des parents)
+            myParents.forEach(parent => {
+                const parentParents = getParentsOf(parent.member.id);
+                parentParents.forEach(gp => {
+                    const unclesAunts = getChildrenOf(gp.member.id);
+                    unclesAunts.forEach(ua => {
+                        if (!addedIds.has(ua.member.id)) {
+                            const type = ua.member.sexe === 'M' ? 'oncle' : 'tante';
+                            relations.unclesAunts.push({ member: ua.member, type: type });
+                            addedIds.add(ua.member.id);
+                        }
+                    });
+                });
+            });
+
+            // 5. Cousins (enfants des oncles/tantes)
+            relations.unclesAunts.forEach(ua => {
+                const cousins = getChildrenOf(ua.member.id);
+                cousins.forEach(cousin => {
+                    if (!addedIds.has(cousin.member.id)) {
+                        const type = cousin.member.sexe === 'M' ? 'cousin' : 'cousine';
+                        relations.cousins.push({ member: cousin.member, type: type });
+                        addedIds.add(cousin.member.id);
+                    }
+                });
+            });
+
+            // 6. Enfants directs
+            const myChildren = getChildrenOf(memberId);
+            myChildren.forEach(child => {
+                if (!addedIds.has(child.member.id)) {
+                    relations.children.push(child);
+                    addedIds.add(child.member.id);
                 }
+            });
 
-                const relatedMember = familyMembers.find(m => m.id === relatedId);
-                if (!relatedMember) return;
+            // 7. Petits-enfants (enfants des enfants)
+            relations.children.forEach(child => {
+                const grandchildren = getChildrenOf(child.member.id);
+                grandchildren.forEach(gc => {
+                    if (!addedIds.has(gc.member.id)) {
+                        const type = gc.member.sexe === 'M' ? 'petit-fils' : 'petite-fille';
+                        relations.grandchildren.push({ member: gc.member, type: type });
+                        addedIds.add(gc.member.id);
+                    }
+                });
+            });
 
-                const relationData = { member: relatedMember, type: relType };
-
-                if (['pere', 'mere'].includes(relType)) {
-                    relations.parents.push(relationData);
-                } else if (['beau-pere', 'belle-mere'].includes(relType)) {
-                    relations.parents.push(relationData);
-                } else if (['grand-pere', 'grand-mere'].includes(relType)) {
-                    relations.grandparents.push(relationData);
-                } else if (['frere', 'soeur', 'demi-frere', 'demi-soeur'].includes(relType)) {
-                    relations.siblings.push(relationData);
-                } else if (relType === 'conjoint') {
-                    relations.spouse.push(relationData);
-                } else if (['fils', 'fille'].includes(relType)) {
-                    relations.children.push(relationData);
-                } else if (['petit-fils', 'petite-fille'].includes(relType)) {
-                    relations.grandchildren.push(relationData);
-                } else if (['oncle', 'tante'].includes(relType)) {
-                    relations.unclesAunts.push(relationData);
-                } else if (['cousin', 'cousine'].includes(relType)) {
-                    relations.cousins.push(relationData);
-                } else {
-                    relations.other.push(relationData);
+            // 8. Conjoint (relation directe)
+            familyRelations.forEach(rel => {
+                if ((rel.member_id === memberId || rel.related_member_id === memberId) && rel.relation_type === 'conjoint') {
+                    const spouseId = rel.member_id === memberId ? rel.related_member_id : rel.member_id;
+                    if (!addedIds.has(spouseId)) {
+                        const spouse = familyMembers.find(m => m.id === spouseId);
+                        if (spouse) {
+                            relations.spouse.push({ member: spouse, type: 'conjoint' });
+                            addedIds.add(spouseId);
+                        }
+                    }
                 }
             });
 
@@ -1218,15 +1243,24 @@
             }
         }
 
-        // Mettre à jour le select
+        // Mettre à jour les selects de parents
         function updatePersonSelect() {
-            const select = document.getElementById('relatedPerson');
-            select.innerHTML = '<option value="">Aucune personne</option>';
+            const pereSelect = document.getElementById('pereId');
+            const mereSelect = document.getElementById('mereId');
+
+            pereSelect.innerHTML = '<option value="">Aucun père</option>';
+            mereSelect.innerHTML = '<option value="">Aucune mère</option>';
+
             familyMembers.forEach(member => {
                 const option = document.createElement('option');
                 option.value = member.id;
                 option.textContent = `${member.prenom} ${member.nom}`;
-                select.appendChild(option);
+
+                if (member.sexe === 'M') {
+                    pereSelect.appendChild(option);
+                } else {
+                    mereSelect.appendChild(option);
+                }
             });
         }
 
@@ -1370,8 +1404,8 @@
                 sexe: form.sexe.value
             };
 
-            const relatedPersonId = form.relatedPerson.value;
-            const relationType = form.relationType.value;
+            const pereId = form.pereId.value;
+            const mereId = form.mereId.value;
 
             try {
                 const { data: newMember, error: memberError } = await supabaseClient
@@ -1382,14 +1416,29 @@
 
                 if (memberError) throw memberError;
 
-                if (relatedPersonId && relationType) {
+                // Ajouter les relations avec les parents
+                const relationsToAdd = [];
+
+                if (pereId) {
+                    relationsToAdd.push({
+                        member_id: pereId,
+                        related_member_id: newMember.id,
+                        relation_type: 'pere'
+                    });
+                }
+
+                if (mereId) {
+                    relationsToAdd.push({
+                        member_id: mereId,
+                        related_member_id: newMember.id,
+                        relation_type: 'mere'
+                    });
+                }
+
+                if (relationsToAdd.length > 0) {
                     await supabaseClient
                         .from('family_relations')
-                        .insert([{
-                            member_id: newMember.id,
-                            related_member_id: relatedPersonId,
-                            relation_type: relationType
-                        }]);
+                        .insert(relationsToAdd);
                 }
 
                 showMessage(`${memberData.prenom} a été ajouté(e) ! 🎉`, 'success');
