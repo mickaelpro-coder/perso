@@ -838,9 +838,182 @@
                 display: none;
             }
         }
+
+        /* Bouton de bascule */
+        .toggle-mode {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9em;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toggle-mode:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Mode Professionnel */
+        body.professional {
+            background: #f5f6fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body.professional * {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body.professional .tree-icon {
+            display: none;
+        }
+
+        body.professional h1 {
+            color: #2c3e50;
+            text-shadow: none;
+            animation: none;
+            font-size: 2em;
+            font-weight: 600;
+        }
+
+        body.professional .form-container {
+            border: 1px solid #dcdde1;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        body.professional .form-title {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        body.professional .tree-container {
+            border: 1px solid #dcdde1;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        body.professional .tree-title {
+            color: #2c3e50;
+        }
+
+        body.professional .btn {
+            background: #3498db;
+            border-radius: 6px;
+        }
+
+        body.professional .btn:hover {
+            background: #2980b9;
+        }
+
+        body.professional .btn-secondary {
+            background: #7f8c8d;
+        }
+
+        body.professional .person-card {
+            border-radius: 8px;
+            border-width: 2px;
+        }
+
+        body.professional .person-card.male {
+            border-color: #3498db;
+        }
+
+        body.professional .person-card.female {
+            border-color: #9b59b6;
+        }
+
+        body.professional .person-card.center.male {
+            border-color: #2980b9;
+            background: #ebf5fb;
+        }
+
+        body.professional .person-card.center.female {
+            border-color: #8e44ad;
+            background: #f5eef8;
+        }
+
+        body.professional .person-avatar {
+            font-size: 2em;
+        }
+
+        body.professional .person-relation-label {
+            background: #34495e;
+            border-radius: 4px;
+        }
+
+        body.professional .generation-header {
+            background: #34495e;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        body.professional .members-list {
+            background: #ecf0f1;
+            border-radius: 8px;
+        }
+
+        body.professional .member-chip {
+            border-radius: 6px;
+        }
+
+        body.professional .member-chip.active {
+            border-color: #3498db;
+            background: #ebf5fb;
+        }
+
+        body.professional .relations-manager {
+            background: #fdf6e3;
+            border: 1px solid #f0c36d;
+            border-radius: 8px;
+        }
+
+        body.professional .edit-form {
+            background: #e8f6f3;
+            border: 1px solid #a3d9c6;
+            border-radius: 8px;
+        }
+
+        body.professional .checkbox-label {
+            color: #2c3e50;
+        }
+
+        body.professional .toggle-mode {
+            background: #e74c3c;
+        }
+
+        body.professional .toggle-mode:hover {
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.5);
+        }
+
+        body.professional input,
+        body.professional select {
+            border-radius: 6px;
+            border-width: 1px;
+        }
+
+        body.professional .btn-save {
+            background: #27ae60;
+            border-radius: 6px;
+        }
+
+        body.professional .btn-add-relation {
+            background: #27ae60;
+            border-radius: 6px;
+        }
     </style>
 </head>
 <body>
+    <button class="toggle-mode" onclick="toggleMode()">🎨 Mode Pro</button>
+
     <div class="container">
         <span class="tree-icon">🌳</span>
         <h1>Mon Arbre Généalogique</h1>
@@ -998,6 +1171,31 @@
         let familyMembers = [];
         let familyRelations = [];
         let selectedMemberId = null;
+        let isProfessionalMode = false;
+
+        // Basculer entre mode enfant et professionnel
+        function toggleMode() {
+            isProfessionalMode = !isProfessionalMode;
+            document.body.classList.toggle('professional', isProfessionalMode);
+            const btn = document.querySelector('.toggle-mode');
+            if (isProfessionalMode) {
+                btn.textContent = '🧸 Mode Enfant';
+            } else {
+                btn.textContent = '🎨 Mode Pro';
+            }
+            // Sauvegarder la préférence
+            localStorage.setItem('genealogie-mode', isProfessionalMode ? 'pro' : 'enfant');
+        }
+
+        // Charger la préférence au démarrage
+        function loadModePreference() {
+            const savedMode = localStorage.getItem('genealogie-mode');
+            if (savedMode === 'pro') {
+                isProfessionalMode = true;
+                document.body.classList.add('professional');
+                document.querySelector('.toggle-mode').textContent = '🧸 Mode Enfant';
+            }
+        }
 
         // Labels pour l'affichage
         const relationLabels = {
@@ -1747,6 +1945,7 @@
         }
 
         // Initialisation
+        loadModePreference();
         document.getElementById('addMemberForm').addEventListener('submit', addMember);
         loadFamilyMembers();
     </script>
