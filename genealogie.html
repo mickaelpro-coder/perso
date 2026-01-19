@@ -1505,7 +1505,14 @@
                 return;
             }
 
-            container.innerHTML = familyMembers.map(member => `
+            // Trier par ordre alphabétique
+            const sortedMembers = [...familyMembers].sort((a, b) => {
+                const nameA = `${a.prenom} ${a.nom}`.toLowerCase();
+                const nameB = `${b.prenom} ${b.nom}`.toLowerCase();
+                return nameA.localeCompare(nameB, 'fr');
+            });
+
+            container.innerHTML = sortedMembers.map(member => `
                 <div class="member-chip ${selectedMemberId === member.id ? 'active' : ''}"
                      onclick="selectMember('${member.id}')">
                     <span class="chip-avatar">${getAvatar(member.sexe, member.date_naissance)}</span>
