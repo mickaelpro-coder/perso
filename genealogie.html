@@ -509,7 +509,7 @@
             background: #fff3e0;
             border-radius: 20px;
             padding: 15px;
-            margin-top: 15px;
+            margin-bottom: 15px;
             border: 3px dashed #ffcc80;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
@@ -1280,27 +1280,7 @@
             </form>
         </div>
 
-        <!-- Affichage de l'arbre -->
-        <div class="tree-container">
-            <h2 class="tree-title">Mon Arbre Familial</h2>
-            <p class="tree-subtitle">Clique sur une personne pour la mettre au centre de l'arbre</p>
-
-            <!-- Liste des membres pour sélection -->
-            <div id="membersList" class="members-list">
-                <div class="members-list-title">Membres de la famille</div>
-                <div id="membersChips" class="members-chips"></div>
-            </div>
-
-            <!-- Arbre généalogique -->
-            <div id="familyTree" class="family-tree">
-                <div class="loading">
-                    <span class="loading-spinner">🌻</span>
-                    <p>Chargement de la famille...</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Gestionnaire de liens (en dehors de l'arbre) -->
+        <!-- Gestionnaire de liens (au-dessus de l'arbre) -->
         <div id="relationsManager" class="relations-manager" style="display: none;">
             <div class="relations-manager-title">Modifier <span id="selectedMemberName"></span></div>
 
@@ -1359,6 +1339,26 @@
             <p style="color: #9e9e9e; font-size: 0.8em; text-align: center; margin-top: 10px;">
                 Les frères/sœurs, oncles/tantes, cousins et grands-parents sont calculés automatiquement !
             </p>
+        </div>
+
+        <!-- Affichage de l'arbre -->
+        <div class="tree-container">
+            <h2 class="tree-title">Mon Arbre Familial</h2>
+            <p class="tree-subtitle">Clique sur une personne pour la mettre au centre de l'arbre</p>
+
+            <!-- Liste des membres pour sélection -->
+            <div id="membersList" class="members-list">
+                <div class="members-list-title">Membres de la famille</div>
+                <div id="membersChips" class="members-chips"></div>
+            </div>
+
+            <!-- Arbre généalogique -->
+            <div id="familyTree" class="family-tree">
+                <div class="loading">
+                    <span class="loading-spinner">🌻</span>
+                    <p>Chargement de la famille...</p>
+                </div>
+            </div>
         </div>
     </div>
 
