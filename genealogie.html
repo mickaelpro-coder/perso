@@ -484,10 +484,13 @@
 
         /* Section de sélection des membres */
         .members-list {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 12px;
-            margin-bottom: 12px;
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 3px dashed #a29bfe;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
         }
 
         .members-list-title {
@@ -1402,6 +1405,8 @@
         body.professional .members-list {
             background: #ecf0f1;
             border-radius: 8px;
+            border: 1px solid #bdc3c7;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
 
         body.professional .member-chip {
@@ -1618,18 +1623,21 @@
             </div>
         </div>
 
+        <!-- Liste des membres pour sélection -->
+        <div id="membersBlock" class="members-list collapsible">
+            <button class="collapse-btn" onclick="toggleCollapse('membersBlock')">−</button>
+            <div class="members-list-title">Membres de la famille</div>
+            <div class="collapsible-content">
+                <div id="membersChips" class="members-chips"></div>
+            </div>
+        </div>
+
         <!-- Affichage de l'arbre -->
         <div class="tree-container collapsible" id="treeBlock">
             <button class="collapse-btn" onclick="toggleCollapse('treeBlock')">−</button>
             <h2 class="tree-title">Mon Arbre Familial</h2>
             <div class="collapsible-content">
             <p class="tree-subtitle">Clique sur une personne pour la mettre au centre de l'arbre</p>
-
-            <!-- Liste des membres pour sélection -->
-            <div id="membersList" class="members-list">
-                <div class="members-list-title">Membres de la famille</div>
-                <div id="membersChips" class="members-chips"></div>
-            </div>
 
             <!-- Arbre généalogique -->
             <div id="familyTree" class="family-tree">
@@ -1695,7 +1703,7 @@
 
         // Charger l'état des blocs au démarrage
         function loadCollapseStates() {
-            ['addFormBlock', 'treeBlock'].forEach(blockId => {
+            ['addFormBlock', 'membersBlock', 'treeBlock'].forEach(blockId => {
                 const state = localStorage.getItem('collapse-' + blockId);
                 if (state === 'collapsed') {
                     const block = document.getElementById(blockId);
