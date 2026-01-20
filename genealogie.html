@@ -1686,14 +1686,19 @@
 
         // Charger l'état des blocs au démarrage
         function loadCollapseStates() {
-            ['addFormBlock', 'membersBlock', 'treeBlock'].forEach(blockId => {
-                const state = localStorage.getItem('collapse-' + blockId);
-                if (state === 'collapsed') {
-                    const block = document.getElementById(blockId);
-                    if (block) {
-                        block.classList.add('collapsed');
-                        block.querySelector('.collapse-btn').textContent = '+';
-                    }
+            // Par défaut : tous réduits sauf treeBlock
+            const defaultStates = {
+                'addFormBlock': 'collapsed',
+                'membersBlock': 'collapsed',
+                'treeBlock': 'expanded'
+            };
+
+            Object.keys(defaultStates).forEach(blockId => {
+                const state = localStorage.getItem('collapse-' + blockId) || defaultStates[blockId];
+                const block = document.getElementById(blockId);
+                if (block && state === 'collapsed') {
+                    block.classList.add('collapsed');
+                    block.querySelector('.collapse-btn').textContent = '+';
                 }
             });
         }
