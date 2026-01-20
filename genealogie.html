@@ -897,6 +897,214 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
         }
 
+        .btn-birthday {
+            position: fixed;
+            top: 10px;
+            right: 340px;
+            background: linear-gradient(135deg, #fdcb6e 0%, #f39c12 100%);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.75em;
+            box-shadow: 0 3px 10px rgba(243, 156, 18, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .btn-birthday:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.5);
+        }
+
+        body.professional .btn-birthday {
+            background: #d68910;
+            border-radius: 6px;
+        }
+
+        /* Calendrier des anniversaires */
+        .calendar-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .calendar-modal.show {
+            display: flex;
+        }
+
+        .calendar-content {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 1000px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .calendar-title {
+            color: #f39c12;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .month-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .month-name {
+            text-align: center;
+            font-weight: bold;
+            color: #6c5ce7;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .days-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            margin-bottom: 4px;
+        }
+
+        .day-header {
+            text-align: center;
+            font-size: 0.6em;
+            color: #636e72;
+            font-weight: bold;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+        }
+
+        .day-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6em;
+            border-radius: 4px;
+            color: #636e72;
+        }
+
+        .day-cell.empty {
+            background: transparent;
+        }
+
+        .day-cell.has-birthday {
+            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .day-cell.has-birthday:hover {
+            transform: scale(1.2);
+            z-index: 10;
+        }
+
+        .day-cell.has-birthday .initials {
+            font-size: 0.7em;
+        }
+
+        .day-cell.has-birthday.male {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+        }
+
+        .day-cell.has-birthday.female {
+            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+        }
+
+        .day-cell.has-birthday.multiple {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+        }
+
+        .birthday-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d3436;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            white-space: nowrap;
+            display: none;
+            z-index: 100;
+        }
+
+        .day-cell.has-birthday:hover .birthday-tooltip {
+            display: block;
+        }
+
+        .calendar-close {
+            display: block;
+            margin: 20px auto 0;
+            background: #b2bec3;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9em;
+        }
+
+        .calendar-close:hover {
+            background: #636e72;
+        }
+
+        body.professional .calendar-content {
+            border-radius: 8px;
+        }
+
+        body.professional .calendar-title {
+            color: #d68910;
+        }
+
+        body.professional .month-name {
+            color: #2c3e50;
+        }
+
+        body.professional .day-cell.has-birthday.male {
+            background: #3498db;
+        }
+
+        body.professional .day-cell.has-birthday.female {
+            background: #9b59b6;
+        }
+
+        body.professional .day-cell.has-birthday.multiple {
+            background: #34495e;
+        }
+
         .btn-children {
             position: fixed;
             top: 10px;
@@ -1194,9 +1402,19 @@
     </style>
 </head>
 <body>
+    <button class="btn-birthday" onclick="showBirthdayCalendar()">🎂 Anniversaires</button>
     <button class="btn-children" onclick="showChildren()">👶 Enfants</button>
     <button class="btn-singles" onclick="showSingles()">💔 Sans conjoint</button>
     <button class="toggle-mode" onclick="toggleMode()">🎨 Mode Pro</button>
+
+    <!-- Modal du calendrier des anniversaires -->
+    <div id="birthdayModal" class="calendar-modal" onclick="closeBirthdayCalendar(event)">
+        <div class="calendar-content" onclick="event.stopPropagation()">
+            <h3 class="calendar-title">🎂 Calendrier des Anniversaires</h3>
+            <div id="birthdayCalendar" class="calendar-grid"></div>
+            <button class="calendar-close" onclick="closeBirthdayCalendar()">Fermer</button>
+        </div>
+    </div>
 
     <!-- Modal des enfants -->
     <div id="childrenModal" class="singles-modal" onclick="closeChildrenModal(event)">
@@ -1504,6 +1722,116 @@
         function closeChildrenModal(event) {
             if (event && event.target !== event.currentTarget) return;
             document.getElementById('childrenModal').classList.remove('show');
+        }
+
+        // Afficher le calendrier des anniversaires
+        function showBirthdayCalendar() {
+            const modal = document.getElementById('birthdayModal');
+            const calendar = document.getElementById('birthdayCalendar');
+
+            const monthNames = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+                               'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+            const dayNames = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+
+            // Collecter les anniversaires par mois/jour
+            const birthdays = {};
+            familyMembers.forEach(member => {
+                if (!member.date_naissance) return;
+
+                let month, day;
+                const dateStr = member.date_naissance.trim();
+
+                // Format JJ/MM/AAAA
+                if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(dateStr)) {
+                    const parts = dateStr.split('/');
+                    day = parseInt(parts[0]);
+                    month = parseInt(parts[1]) - 1;
+                }
+                // Format AAAA-MM-JJ (ISO)
+                else if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+                    const parts = dateStr.split('-');
+                    month = parseInt(parts[1]) - 1;
+                    day = parseInt(parts[2]);
+                }
+                // Juste une année - pas de jour précis
+                else {
+                    return;
+                }
+
+                const key = `${month}-${day}`;
+                if (!birthdays[key]) {
+                    birthdays[key] = [];
+                }
+                birthdays[key].push(member);
+            });
+
+            // Générer le calendrier
+            let html = '';
+            const currentYear = new Date().getFullYear();
+
+            for (let month = 0; month < 12; month++) {
+                const firstDay = new Date(currentYear, month, 1);
+                const lastDay = new Date(currentYear, month + 1, 0);
+                const daysInMonth = lastDay.getDate();
+                let startDay = firstDay.getDay();
+                startDay = startDay === 0 ? 6 : startDay - 1; // Lundi = 0
+
+                html += `<div class="month-card">
+                    <div class="month-name">${monthNames[month]}</div>
+                    <div class="days-header">
+                        ${dayNames.map(d => `<div class="day-header">${d}</div>`).join('')}
+                    </div>
+                    <div class="days-grid">`;
+
+                // Cellules vides avant le premier jour
+                for (let i = 0; i < startDay; i++) {
+                    html += '<div class="day-cell empty"></div>';
+                }
+
+                // Jours du mois
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const key = `${month}-${day}`;
+                    const dayBirthdays = birthdays[key];
+
+                    if (dayBirthdays && dayBirthdays.length > 0) {
+                        const initials = dayBirthdays.map(m =>
+                            m.prenom.charAt(0).toUpperCase() + m.nom.charAt(0).toUpperCase()
+                        ).join(' ');
+
+                        const names = dayBirthdays.map(m => `${m.prenom} ${m.nom}`).join(', ');
+
+                        let colorClass = 'multiple';
+                        if (dayBirthdays.length === 1) {
+                            colorClass = dayBirthdays[0].sexe === 'M' ? 'male' : 'female';
+                        }
+
+                        html += `<div class="day-cell has-birthday ${colorClass}"
+                                     onclick="selectMemberFromCalendar('${dayBirthdays[0].id}')">
+                            <span class="initials">${initials}</span>
+                            <div class="birthday-tooltip">${names}</div>
+                        </div>`;
+                    } else {
+                        html += `<div class="day-cell">${day}</div>`;
+                    }
+                }
+
+                html += '</div></div>';
+            }
+
+            calendar.innerHTML = html;
+            modal.classList.add('show');
+        }
+
+        // Sélectionner un membre depuis le calendrier
+        function selectMemberFromCalendar(memberId) {
+            closeBirthdayCalendar();
+            selectMember(memberId);
+        }
+
+        // Fermer le calendrier
+        function closeBirthdayCalendar(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('birthdayModal').classList.remove('show');
         }
 
         // Labels pour l'affichage
