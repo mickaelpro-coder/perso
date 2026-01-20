@@ -1,34 +1,52 @@
+<?php
+// Configuration : on cherche tous les fichiers .html
+$files = glob("*.html");
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Liste des fichiers HTML</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des fichiers du répertoire</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        .file-link { display: block; margin-bottom: 8px; font-size: 1.1em; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; background: #f4f4f9; }
+        h1 { color: #333; border-bottom: 2px solid #ccc; padding-bottom: 10px; }
+        ul { list-style: none; padding: 0; }
+        li { background: white; margin: 10px 0; padding: 15px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        li:hover { transform: translateX(10px); }
+        a { text-decoration: none; color: #007bff; font-weight: bold; font-size: 1.2em; }
+        .filename { color: #666; font-size: 0.9em; font-style: italic; }
     </style>
 </head>
 <body>
-    <h1>Sommaire des pages</h1>
-    <?php
-    $files = glob("*.html");
-    if ($files) {
-        echo "<ul>";
-        foreach ($files as $file) {
-            // On récupère le contenu du titre
-            $doc = new DOMDocument();
-            @$doc->loadHTMLFile($file);
-            $xpath = new DOMXPath($doc);
-            $titleNode = $xpath->query('//title');
-            
-            $title = ($titleNode->length > 0) ? $titleNode->item(0)->nodeValue : $file;
 
-            echo "<li><a class='file-link' href='$file'>$title</a></li>";
-        }
-        echo "</ul>";
-    } else {
-        echo "Aucun fichier HTML trouvé.";
-    }
-    ?>
+    <h1>Fichiers HTML disponibles</h1>
+
+    <?php if (empty($files)): ?>
+        <p>Aucun fichier .html trouvé dans ce dossier.</p>
+    <?php else: ?>
+        <ul>
+            <?php foreach ($files as $file): 
+                // Ignorer ce fichier si par hasard il finit en .html
+                if ($file == 'index.php') continue;
+
+                // Lire le contenu du fichier
+                $content = file_get_contents($file);
+                
+                // Extraire le titre via une expression régulière
+                if (preg_match('/<title>(.*?)<\/title>/is', $content, $matches)) {
+                    $title = $matches[1];
+                } else {
+                    $title = "Sans titre";
+                }
+            ?>
+                <li>
+                    <a href="<?php echo $file; ?>"><?php echo htmlspecialchars($title); ?></a><br>
+                    <span class="filename">Fichier : <?php echo $file; ?></span>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+
 </body>
 </html>
