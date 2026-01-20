@@ -933,52 +933,59 @@
         }
 
         /* Bouton de bascule */
-        .toggle-mode {
+        /* Conteneur des boutons en haut */
+        .top-buttons {
             position: fixed;
             top: 10px;
             right: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            display: flex;
+            gap: 8px;
+            z-index: 1000;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            max-width: calc(100% - 20px);
+        }
+
+        .top-buttons button {
             border: none;
             padding: 8px 12px;
             border-radius: 15px;
             cursor: pointer;
             font-family: inherit;
             font-size: 0.75em;
-            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.4);
+            color: white;
             transition: all 0.3s ease;
-            z-index: 1000;
+            white-space: nowrap;
+        }
+
+        .top-buttons button:hover {
+            transform: scale(1.05);
+        }
+
+        .toggle-mode {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.4);
         }
 
         .toggle-mode:hover {
-            transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
         }
 
         .btn-birthday {
-            position: fixed;
-            top: 10px;
-            right: 340px;
             background: linear-gradient(135deg, #fdcb6e 0%, #f39c12 100%);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.75em;
             box-shadow: 0 3px 10px rgba(243, 156, 18, 0.4);
-            transition: all 0.3s ease;
-            z-index: 1000;
         }
 
         .btn-birthday:hover {
-            transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(243, 156, 18, 0.5);
         }
 
         body.professional .btn-birthday {
             background: #d68910;
+            border-radius: 6px;
+        }
+
+        body.professional .top-buttons button {
             border-radius: 6px;
         }
 
@@ -1164,51 +1171,24 @@
         }
 
         .btn-children {
-            position: fixed;
-            top: 10px;
-            right: 240px;
             background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.75em;
             box-shadow: 0 3px 10px rgba(0, 184, 148, 0.4);
-            transition: all 0.3s ease;
-            z-index: 1000;
         }
 
         .btn-children:hover {
-            transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(0, 184, 148, 0.5);
         }
 
         body.professional .btn-children {
             background: #16a085;
-            border-radius: 6px;
         }
 
         .btn-singles {
-            position: fixed;
-            top: 10px;
-            right: 130px;
             background: linear-gradient(135deg, #e17055 0%, #d63031 100%);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.75em;
             box-shadow: 0 3px 10px rgba(214, 48, 49, 0.4);
-            transition: all 0.3s ease;
-            z-index: 1000;
         }
 
         .btn-singles:hover {
-            transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(214, 48, 49, 0.5);
         }
 
@@ -1461,10 +1441,13 @@
     </style>
 </head>
 <body>
-    <button class="btn-birthday" onclick="showBirthdayCalendar()">🎂 Anniversaires</button>
-    <button class="btn-children" onclick="showChildren()">👶 Enfants</button>
-    <button class="btn-singles" onclick="showSingles()">💔 Sans conjoint</button>
-    <button class="toggle-mode" onclick="toggleMode()">🎨 Mode Pro</button>
+    <!-- Boutons en haut -->
+    <div class="top-buttons">
+        <button class="btn-birthday" onclick="showBirthdayCalendar()">🎂 Anniversaires</button>
+        <button class="btn-children" onclick="showChildren()">👶 Enfants</button>
+        <button class="btn-singles" onclick="showSingles()">💔 Sans conjoint</button>
+        <button class="toggle-mode" onclick="toggleMode()">🎨 Mode Pro</button>
+    </div>
 
     <!-- Modal du calendrier des anniversaires -->
     <div id="birthdayModal" class="calendar-modal" onclick="closeBirthdayCalendar(event)">
