@@ -2045,12 +2045,16 @@
         function getMemberRelationsGrouped(memberId) {
             const relations = {
                 parents: [],
+                father: null,
+                mother: null,
                 grandparents: [],
                 siblings: [],
                 spouse: [],
                 children: [],
                 grandchildren: [],
                 unclesAunts: [],
+                fatherSideUnclesAunts: [],
+                motherSideUnclesAunts: [],
                 cousins: [],
                 other: []
             };
@@ -2062,6 +2066,11 @@
             myParents.forEach(p => {
                 relations.parents.push(p);
                 addedIds.add(p.member.id);
+                if (p.type === 'pere') {
+                    relations.father = p.member;
+                } else if (p.type === 'mere') {
+                    relations.mother = p.member;
+                }
             });
 
             // 2. Grands-parents (parents des parents)
@@ -2091,12 +2100,19 @@
             // 4. Oncles et tantes (frères/sœurs des parents)
             myParents.forEach(parent => {
                 const parentParents = getParentsOf(parent.member.id);
+                const isFatherSide = parent.type === 'pere';
                 parentParents.forEach(gp => {
                     const unclesAunts = getChildrenOf(gp.member.id);
                     unclesAunts.forEach(ua => {
                         if (!addedIds.has(ua.member.id)) {
                             const type = ua.member.sexe === 'M' ? 'oncle' : 'tante';
-                            relations.unclesAunts.push({ member: ua.member, type: type });
+                            const uaEntry = { member: ua.member, type: type };
+                            relations.unclesAunts.push(uaEntry);
+                            if (isFatherSide) {
+                                relations.fatherSideUnclesAunts.push(uaEntry);
+                            } else {
+                                relations.motherSideUnclesAunts.push(uaEntry);
+                            }
                             addedIds.add(ua.member.id);
                         }
                     });
@@ -2540,15 +2556,25 @@
                             <span class="gen-emoji">👨👩</span>Parents${relations.unclesAunts.length > 0 ? ' & Oncles/Tantes' : ''}
                         </div>
                         <div class="tree-level">
-                            <div class="tree-row single" style="gap: 20px;">
-                                ${relations.parents.length > 0 ? `
-                                    <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-                                        ${relations.parents.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
+                            <div class="tree-row single" style="gap: 15px; align-items: center;">
+                                ${relations.fatherSideUnclesAunts.length > 0 ? `
+                                    <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
+                                        ${relations.fatherSideUnclesAunts.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
                                     </div>
                                 ` : ''}
-                                ${relations.unclesAunts.length > 0 ? `
-                                    <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-                                        ${relations.unclesAunts.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
+                                ${relations.father ? `
+                                    <div style="display: flex; justify-content: center;">
+                                        ${createPersonCard(relations.father, 'Père')}
+                                    </div>
+                                ` : ''}
+                                ${relations.mother ? `
+                                    <div style="display: flex; justify-content: center;">
+                                        ${createPersonCard(relations.mother, 'Mère')}
+                                    </div>
+                                ` : ''}
+                                ${relations.motherSideUnclesAunts.length > 0 ? `
+                                    <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
+                                        ${relations.motherSideUnclesAunts.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
                                     </div>
                                 ` : ''}
                             </div>
