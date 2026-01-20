@@ -2197,10 +2197,6 @@
                 updateMembersChips();
                 updatePersonSelect();
 
-                if (familyMembers.length > 0 && !selectedMemberId) {
-                    selectedMemberId = familyMembers[0].id;
-                }
-
                 updateRelationsManager();
                 renderFamilyTree();
             } catch (error) {
@@ -2502,8 +2498,13 @@
 
             const centerMember = familyMembers.find(m => m.id === selectedMemberId);
             if (!centerMember) {
-                selectedMemberId = familyMembers[0].id;
-                renderFamilyTree();
+                container.innerHTML = `
+                    <div class="no-members">
+                        <span>👆</span>
+                        <p>Sélectionne une personne dans la liste</p>
+                        <p style="font-size: 0.8em; color: #636e72;">pour afficher son arbre familial</p>
+                    </div>
+                `;
                 return;
             }
 
