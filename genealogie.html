@@ -484,10 +484,13 @@
 
         /* Section de sélection des membres */
         .members-list {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 12px;
-            margin-bottom: 12px;
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 3px dashed #a29bfe;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
         }
 
         .members-list-title {
@@ -930,52 +933,59 @@
         }
 
         /* Bouton de bascule */
-        .toggle-mode {
+        /* Conteneur des boutons en haut */
+        .top-buttons {
             position: fixed;
             top: 10px;
             right: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            display: flex;
+            gap: 8px;
+            z-index: 1000;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            max-width: calc(100% - 20px);
+        }
+
+        .top-buttons button {
             border: none;
             padding: 8px 12px;
             border-radius: 15px;
             cursor: pointer;
             font-family: inherit;
             font-size: 0.75em;
-            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.4);
+            color: white;
             transition: all 0.3s ease;
-            z-index: 1000;
+            white-space: nowrap;
+        }
+
+        .top-buttons button:hover {
+            transform: scale(1.05);
+        }
+
+        .toggle-mode {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.4);
         }
 
         .toggle-mode:hover {
-            transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
         }
 
         .btn-birthday {
-            position: fixed;
-            top: 10px;
-            right: 340px;
             background: linear-gradient(135deg, #fdcb6e 0%, #f39c12 100%);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.75em;
             box-shadow: 0 3px 10px rgba(243, 156, 18, 0.4);
-            transition: all 0.3s ease;
-            z-index: 1000;
         }
 
         .btn-birthday:hover {
-            transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(243, 156, 18, 0.5);
         }
 
         body.professional .btn-birthday {
             background: #d68910;
+            border-radius: 6px;
+        }
+
+        body.professional .top-buttons button {
             border-radius: 6px;
         }
 
@@ -1161,51 +1171,24 @@
         }
 
         .btn-children {
-            position: fixed;
-            top: 10px;
-            right: 240px;
             background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.75em;
             box-shadow: 0 3px 10px rgba(0, 184, 148, 0.4);
-            transition: all 0.3s ease;
-            z-index: 1000;
         }
 
         .btn-children:hover {
-            transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(0, 184, 148, 0.5);
         }
 
         body.professional .btn-children {
             background: #16a085;
-            border-radius: 6px;
         }
 
         .btn-singles {
-            position: fixed;
-            top: 10px;
-            right: 130px;
             background: linear-gradient(135deg, #e17055 0%, #d63031 100%);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.75em;
             box-shadow: 0 3px 10px rgba(214, 48, 49, 0.4);
-            transition: all 0.3s ease;
-            z-index: 1000;
         }
 
         .btn-singles:hover {
-            transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(214, 48, 49, 0.5);
         }
 
@@ -1402,6 +1385,8 @@
         body.professional .members-list {
             background: #ecf0f1;
             border-radius: 8px;
+            border: 1px solid #bdc3c7;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
 
         body.professional .member-chip {
@@ -1456,10 +1441,13 @@
     </style>
 </head>
 <body>
-    <button class="btn-birthday" onclick="showBirthdayCalendar()">🎂 Anniversaires</button>
-    <button class="btn-children" onclick="showChildren()">👶 Enfants</button>
-    <button class="btn-singles" onclick="showSingles()">💔 Sans conjoint</button>
-    <button class="toggle-mode" onclick="toggleMode()">🎨 Mode Pro</button>
+    <!-- Boutons en haut -->
+    <div class="top-buttons">
+        <button class="btn-birthday" onclick="showBirthdayCalendar()">🎂 Anniversaires</button>
+        <button class="btn-children" onclick="showChildren()">👶 Enfants</button>
+        <button class="btn-singles" onclick="showSingles()">💔 Sans conjoint</button>
+        <button class="toggle-mode" onclick="toggleMode()">🎨 Mode Pro</button>
+    </div>
 
     <!-- Modal du calendrier des anniversaires -->
     <div id="birthdayModal" class="calendar-modal" onclick="closeBirthdayCalendar(event)">
@@ -1618,18 +1606,21 @@
             </div>
         </div>
 
+        <!-- Liste des membres pour sélection -->
+        <div id="membersBlock" class="members-list collapsible">
+            <button class="collapse-btn" onclick="toggleCollapse('membersBlock')">−</button>
+            <div class="members-list-title">Membres de la famille</div>
+            <div class="collapsible-content">
+                <div id="membersChips" class="members-chips"></div>
+            </div>
+        </div>
+
         <!-- Affichage de l'arbre -->
         <div class="tree-container collapsible" id="treeBlock">
             <button class="collapse-btn" onclick="toggleCollapse('treeBlock')">−</button>
             <h2 class="tree-title">Mon Arbre Familial</h2>
             <div class="collapsible-content">
             <p class="tree-subtitle">Clique sur une personne pour la mettre au centre de l'arbre</p>
-
-            <!-- Liste des membres pour sélection -->
-            <div id="membersList" class="members-list">
-                <div class="members-list-title">Membres de la famille</div>
-                <div id="membersChips" class="members-chips"></div>
-            </div>
 
             <!-- Arbre généalogique -->
             <div id="familyTree" class="family-tree">
@@ -1695,14 +1686,19 @@
 
         // Charger l'état des blocs au démarrage
         function loadCollapseStates() {
-            ['addFormBlock', 'treeBlock'].forEach(blockId => {
-                const state = localStorage.getItem('collapse-' + blockId);
-                if (state === 'collapsed') {
-                    const block = document.getElementById(blockId);
-                    if (block) {
-                        block.classList.add('collapsed');
-                        block.querySelector('.collapse-btn').textContent = '+';
-                    }
+            // Par défaut : tous réduits sauf treeBlock
+            const defaultStates = {
+                'addFormBlock': 'collapsed',
+                'membersBlock': 'collapsed',
+                'treeBlock': 'expanded'
+            };
+
+            Object.keys(defaultStates).forEach(blockId => {
+                const state = localStorage.getItem('collapse-' + blockId) || defaultStates[blockId];
+                const block = document.getElementById(blockId);
+                if (block && state === 'collapsed') {
+                    block.classList.add('collapsed');
+                    block.querySelector('.collapse-btn').textContent = '+';
                 }
             });
         }
@@ -2206,10 +2202,6 @@
                 updateMembersChips();
                 updatePersonSelect();
 
-                if (familyMembers.length > 0 && !selectedMemberId) {
-                    selectedMemberId = familyMembers[0].id;
-                }
-
                 updateRelationsManager();
                 renderFamilyTree();
             } catch (error) {
@@ -2511,8 +2503,13 @@
 
             const centerMember = familyMembers.find(m => m.id === selectedMemberId);
             if (!centerMember) {
-                selectedMemberId = familyMembers[0].id;
-                renderFamilyTree();
+                container.innerHTML = `
+                    <div class="no-members">
+                        <span>👆</span>
+                        <p>Sélectionne une personne dans la liste</p>
+                        <p style="font-size: 0.8em; color: #636e72;">pour afficher son arbre familial</p>
+                    </div>
+                `;
                 return;
             }
 
