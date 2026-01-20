@@ -458,6 +458,59 @@
             display: none;
         }
 
+        /* Groupe de fratrie (parent + oncles/tantes) */
+        .sibling-group {
+            display: flex;
+            gap: 8px;
+            position: relative;
+            padding-top: 15px;
+            align-items: flex-start;
+        }
+
+        .sibling-group::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+            background: #b2bec3;
+        }
+
+        .sibling-group .person-card {
+            position: relative;
+        }
+
+        .sibling-group .person-card::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 15px;
+            background: #b2bec3;
+        }
+
+        .parents-row {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .sibling-group.no-siblings {
+            padding-top: 0;
+        }
+
+        .sibling-group.no-siblings::before {
+            display: none;
+        }
+
+        .sibling-group.no-siblings .person-card::before {
+            display: none;
+        }
+
         .tree-row > .person-card::before {
             content: '';
             position: absolute;
@@ -2550,30 +2603,25 @@
 
             // Génération 2: Parents + Oncles/Tantes (seulement s'il y en a)
             if (relations.parents.length > 0 || relations.unclesAunts.length > 0) {
+                const hasFatherGroup = relations.father && relations.fatherSideUnclesAunts.length > 0;
+                const hasMotherGroup = relations.mother && relations.motherSideUnclesAunts.length > 0;
+
                 html += `
                     <div class="tree-level-wrapper">
                         <div class="generation-header">
                             <span class="gen-emoji">👨👩</span>Parents${relations.unclesAunts.length > 0 ? ' & Oncles/Tantes' : ''}
                         </div>
                         <div class="tree-level">
-                            <div class="tree-row single" style="gap: 15px; align-items: center;">
-                                ${relations.fatherSideUnclesAunts.length > 0 ? `
-                                    <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
-                                        ${relations.fatherSideUnclesAunts.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
-                                    </div>
-                                ` : ''}
+                            <div class="parents-row">
                                 ${relations.father ? `
-                                    <div style="display: flex; justify-content: center;">
+                                    <div class="sibling-group${!hasFatherGroup ? ' no-siblings' : ''}">
+                                        ${relations.fatherSideUnclesAunts.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
                                         ${createPersonCard(relations.father, 'Père')}
                                     </div>
                                 ` : ''}
                                 ${relations.mother ? `
-                                    <div style="display: flex; justify-content: center;">
+                                    <div class="sibling-group${!hasMotherGroup ? ' no-siblings' : ''}">
                                         ${createPersonCard(relations.mother, 'Mère')}
-                                    </div>
-                                ` : ''}
-                                ${relations.motherSideUnclesAunts.length > 0 ? `
-                                    <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
                                         ${relations.motherSideUnclesAunts.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
                                     </div>
                                 ` : ''}
