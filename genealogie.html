@@ -2532,15 +2532,26 @@
                 `;
             }
 
-            // Génération 2: Parents (seulement s'il y en a)
-            if (relations.parents.length > 0) {
+            // Génération 2: Parents + Oncles/Tantes (seulement s'il y en a)
+            if (relations.parents.length > 0 || relations.unclesAunts.length > 0) {
                 html += `
                     <div class="tree-level-wrapper">
                         <div class="generation-header">
-                            <span class="gen-emoji">👨👩</span>Parents
+                            <span class="gen-emoji">👨👩</span>Parents${relations.unclesAunts.length > 0 ? ' & Oncles/Tantes' : ''}
                         </div>
                         <div class="tree-level">
-                            ${createTreeLevel(relations.parents)}
+                            <div class="tree-row single" style="gap: 20px;">
+                                ${relations.parents.length > 0 ? `
+                                    <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                                        ${relations.parents.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
+                                    </div>
+                                ` : ''}
+                                ${relations.unclesAunts.length > 0 ? `
+                                    <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                                        ${relations.unclesAunts.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
+                                    </div>
+                                ` : ''}
+                            </div>
                         </div>
                     </div>
                     <div class="vertical-line"></div>
@@ -2600,9 +2611,8 @@
                 `;
             }
 
-            // Autres relations (oncles, tantes, cousins)
-            if (relations.unclesAunts.length > 0 || relations.other.length > 0) {
-                const others = [...relations.unclesAunts, ...relations.other];
+            // Autres relations
+            if (relations.other.length > 0) {
                 html += `
                     <div class="vertical-line"></div>
                     <div class="tree-level-wrapper">
@@ -2610,7 +2620,7 @@
                             <span class="gen-emoji">👥</span>Autres liens
                         </div>
                         <div class="tree-level">
-                            ${createTreeLevel(others)}
+                            ${createTreeLevel(relations.other)}
                         </div>
                     </div>
                 `;
