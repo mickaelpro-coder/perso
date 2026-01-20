@@ -2559,7 +2559,6 @@
             }
 
             // Génération 3: Moi + Conjoint + Frères/Sœurs (toujours affiché)
-            const siblingsAndCousins = [...relations.siblings, ...relations.cousins];
             html += `
                 <div class="tree-level-wrapper">
                     <div class="generation-header" style="background: linear-gradient(135deg, #e84393 0%, #fd79a8 100%);">
@@ -2567,9 +2566,9 @@
                     </div>
                     <div class="tree-level">
                         <div class="tree-row single" style="gap: 30px;">
-                            ${siblingsAndCousins.length > 0 ? `
+                            ${relations.siblings.length > 0 ? `
                                 <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
-                                    ${siblingsAndCousins.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
+                                    ${relations.siblings.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
                                 </div>
                             ` : ''}
                             <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap; justify-content: center;">
