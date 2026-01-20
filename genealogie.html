@@ -45,6 +45,54 @@
             margin-bottom: 5px;
         }
 
+        /* Bouton de réduction des blocs */
+        .collapse-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #b2bec3;
+            background: white;
+            color: #636e72;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 5;
+        }
+
+        .collapse-btn:hover {
+            background: #dfe6e9;
+            border-color: #636e72;
+        }
+
+        .collapsible {
+            position: relative;
+        }
+
+        .collapsible .collapsible-content {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .collapsible.collapsed .collapsible-content {
+            display: none;
+        }
+
+        .collapsible.collapsed .collapse-btn {
+            transform: rotate(0deg);
+        }
+
+        body.professional .collapse-btn {
+            border-radius: 4px;
+            border-width: 1px;
+        }
+
         /* Formulaire */
         .form-container {
             background: white;
@@ -53,6 +101,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             margin-bottom: 15px;
             border: 3px dashed #74b9ff;
+            position: relative;
         }
 
         .form-title {
@@ -157,6 +206,11 @@
             border: 3px dashed #00b894;
             min-height: 400px;
             overflow-x: auto;
+            position: relative;
+        }
+
+        .tree-container.collapsed {
+            min-height: auto;
         }
 
         .tree-title {
@@ -512,6 +566,7 @@
             margin-bottom: 15px;
             border: 3px dashed #ffcc80;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
         }
 
         .relations-manager-title {
@@ -1440,8 +1495,10 @@
         <div id="message"></div>
 
         <!-- Formulaire d'ajout -->
-        <div class="form-container">
+        <div class="form-container collapsible" id="addFormBlock">
+            <button class="collapse-btn" onclick="toggleCollapse('addFormBlock')">−</button>
             <h2 class="form-title">Ajouter un membre de la famille</h2>
+            <div class="collapsible-content">
             <form id="addMemberForm">
                 <div class="form-grid">
                     <div class="form-group">
@@ -1495,12 +1552,14 @@
                     </div>
                 </div>
             </form>
+            </div>
         </div>
 
         <!-- Gestionnaire de liens (au-dessus de l'arbre) -->
-        <div id="relationsManager" class="relations-manager" style="display: none;">
+        <div id="relationsManager" class="relations-manager collapsible" style="display: none;">
+            <button class="collapse-btn" onclick="toggleCollapse('relationsManager')">−</button>
             <div class="relations-manager-title">Modifier <span id="selectedMemberName"></span></div>
-
+            <div class="collapsible-content">
             <!-- Formulaire de modification -->
             <div class="edit-form">
                 <div class="edit-form-grid">
@@ -1556,11 +1615,14 @@
             <p style="color: #9e9e9e; font-size: 0.8em; text-align: center; margin-top: 10px;">
                 Les frères/sœurs, oncles/tantes, cousins et grands-parents sont calculés automatiquement !
             </p>
+            </div>
         </div>
 
         <!-- Affichage de l'arbre -->
-        <div class="tree-container">
+        <div class="tree-container collapsible" id="treeBlock">
+            <button class="collapse-btn" onclick="toggleCollapse('treeBlock')">−</button>
             <h2 class="tree-title">Mon Arbre Familial</h2>
+            <div class="collapsible-content">
             <p class="tree-subtitle">Clique sur une personne pour la mettre au centre de l'arbre</p>
 
             <!-- Liste des membres pour sélection -->
@@ -1575,6 +1637,7 @@
                     <span class="loading-spinner">🌻</span>
                     <p>Chargement de la famille...</p>
                 </div>
+            </div>
             </div>
         </div>
     </div>
@@ -1614,6 +1677,34 @@
                 document.body.classList.add('professional');
                 document.querySelector('.toggle-mode').textContent = '🧸 Mode Enfant';
             }
+        }
+
+        // Réduire/Agrandir un bloc
+        function toggleCollapse(blockId) {
+            const block = document.getElementById(blockId);
+            const btn = block.querySelector('.collapse-btn');
+            block.classList.toggle('collapsed');
+            if (block.classList.contains('collapsed')) {
+                btn.textContent = '+';
+            } else {
+                btn.textContent = '−';
+            }
+            // Sauvegarder l'état
+            localStorage.setItem('collapse-' + blockId, block.classList.contains('collapsed') ? 'collapsed' : 'expanded');
+        }
+
+        // Charger l'état des blocs au démarrage
+        function loadCollapseStates() {
+            ['addFormBlock', 'treeBlock'].forEach(blockId => {
+                const state = localStorage.getItem('collapse-' + blockId);
+                if (state === 'collapsed') {
+                    const block = document.getElementById(blockId);
+                    if (block) {
+                        block.classList.add('collapsed');
+                        block.querySelector('.collapse-btn').textContent = '+';
+                    }
+                }
+            });
         }
 
         // Afficher les adultes sans conjoint
@@ -2624,6 +2715,7 @@
 
         // Initialisation
         loadModePreference();
+        loadCollapseStates();
         document.getElementById('addMemberForm').addEventListener('submit', addMember);
         loadFamilyMembers();
     </script>
