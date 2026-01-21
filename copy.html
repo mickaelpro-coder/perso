@@ -316,14 +316,17 @@
                         ? item.text.substring(0, 50) + '...'
                         : item.text;
 
-                    div.innerHTML = `
-                        <div class="history-text">
-                            ${escapeHtml(displayText)}
-                        </div>
-                        <button class="btn-copy" onclick="copyText(this, '${escapeForJs(item.text)}')">
-                            Copier
-                        </button>
-                    `;
+                    const textDiv = document.createElement('div');
+                    textDiv.className = 'history-text';
+                    textDiv.textContent = displayText;
+
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-copy';
+                    btn.textContent = 'Copier';
+                    btn.addEventListener('click', () => copyText(btn, item.text));
+
+                    div.appendChild(textDiv);
+                    div.appendChild(btn);
                     list.appendChild(div);
                 });
 
@@ -400,23 +403,6 @@
                 console.error('Copy failed:', error);
                 showMessage('Erreur lors de la copie', 'error');
             }
-        }
-
-        // Escape HTML to prevent XSS
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // Escape text for use in JavaScript string
-        function escapeForJs(text) {
-            return text
-                .replace(/\\/g, '\\\\')
-                .replace(/'/g, "\\'")
-                .replace(/"/g, '\\"')
-                .replace(/\n/g, '\\n')
-                .replace(/\r/g, '\\r');
         }
 
         // Allow Ctrl+Enter to save
