@@ -1565,6 +1565,55 @@
             background: #e67e22;
         }
 
+        /* Groupe fratrie (parent + frères/sœurs) avec trait au-dessus */
+        .sibling-group-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sibling-group-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            position: relative;
+            padding-top: 20px;
+        }
+
+        .sibling-group-row::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 15px;
+            right: 15px;
+            height: 3px;
+            background: linear-gradient(90deg, #a29bfe 0%, #6c5ce7 50%, #a29bfe 100%);
+            border-radius: 2px;
+        }
+
+        .sibling-group-row .person-card {
+            position: relative;
+        }
+
+        .sibling-group-row .person-card::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 12px;
+            background: #6c5ce7;
+        }
+
+        body.professional .sibling-group-row::before {
+            background: linear-gradient(90deg, #7f8c8d 0%, #34495e 50%, #7f8c8d 100%);
+        }
+
+        body.professional .sibling-group-row .person-card::before {
+            background: #34495e;
+        }
+
         /* Connecteur de la personne vers les parents */
         .person-with-connector {
             display: flex;
@@ -2985,10 +3034,12 @@
                 `;
             }
 
-            // Génération 2: Parents centrés + Oncles/Tantes sur les côtés
+            // Génération 2: Parents centrés + Oncles/Tantes reliés par des traits
             if (relations.parents.length > 0 || relations.unclesAunts.length > 0) {
                 const hasUnclesAunts = relations.unclesAunts.length > 0;
                 const hasBothParents = relations.father && relations.mother;
+                const hasFatherSiblings = relations.fatherSideUnclesAunts.length > 0;
+                const hasMotherSiblings = relations.motherSideUnclesAunts.length > 0;
 
                 html += `
                     <div class="tree-level-wrapper">
@@ -2996,31 +3047,45 @@
                             <span class="gen-emoji">👨👩</span>Parents${hasUnclesAunts ? ' & Oncles/Tantes' : ''}
                         </div>
                         <div class="tree-level">
-                            <div style="display: flex; align-items: flex-start; justify-content: center; gap: 30px;">
-                                ${relations.fatherSideUnclesAunts.length > 0 ? `
-                                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                        ${relations.fatherSideUnclesAunts.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
+                            <div style="display: flex; align-items: flex-end; justify-content: center; gap: 40px;">
+                                ${relations.father ? `
+                                    <div class="sibling-group-container">
+                                        ${hasFatherSiblings ? `
+                                            <div class="sibling-group-row">
+                                                ${relations.fatherSideUnclesAunts.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
+                                                ${createPersonCard(relations.father, 'Père')}
+                                            </div>
+                                        ` : `
+                                            <div style="padding-top: 0;">
+                                                ${createPersonCard(relations.father, 'Père')}
+                                            </div>
+                                        `}
                                     </div>
                                 ` : ''}
-                                <div class="parents-centered">
-                                    <div class="parents-couple${hasBothParents ? ' has-both' : ''}">
-                                        ${relations.father ? createPersonCard(relations.father, 'Père') : ''}
-                                        ${relations.mother ? createPersonCard(relations.mother, 'Mère') : ''}
+                                ${relations.mother ? `
+                                    <div class="sibling-group-container">
+                                        ${hasMotherSiblings ? `
+                                            <div class="sibling-group-row">
+                                                ${createPersonCard(relations.mother, 'Mère')}
+                                                ${relations.motherSideUnclesAunts.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
+                                            </div>
+                                        ` : `
+                                            <div style="padding-top: 0;">
+                                                ${createPersonCard(relations.mother, 'Mère')}
+                                            </div>
+                                        `}
                                     </div>
-                                    ${hasBothParents ? `
-                                        <div class="parents-link-bottom">
-                                            <span class="heart">💕</span>
-                                        </div>
-                                    ` : ''}
-                                    <div class="parent-to-child-connector">
-                                        <div class="vertical-connector"></div>
+                                ` : ''}
+                            </div>
+                            <div class="parents-centered" style="margin-top: 10px;">
+                                ${hasBothParents ? `
+                                    <div class="parents-link-bottom">
+                                        <span class="heart">💕</span>
                                     </div>
+                                ` : ''}
+                                <div class="parent-to-child-connector">
+                                    <div class="vertical-connector"></div>
                                 </div>
-                                ${relations.motherSideUnclesAunts.length > 0 ? `
-                                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                        ${relations.motherSideUnclesAunts.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
-                                    </div>
-                                ` : ''}
                             </div>
                         </div>
                     </div>
