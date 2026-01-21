@@ -2716,7 +2716,7 @@
                 `;
             }
 
-            // Génération 3: Moi + Conjoint + Frères/Sœurs (toujours affiché)
+            // Génération 3: Moi (centré) + Frères/Sœurs à gauche + Conjoint à droite
             const hasParents = relations.parents.length > 0;
             html += `
                 <div class="tree-level-wrapper">
@@ -2724,19 +2724,21 @@
                         <span class="gen-emoji">⭐</span>${centerMember.prenom}
                     </div>
                     <div class="tree-level">
-                        <div style="display: flex; gap: 30px; align-items: flex-start; justify-content: center;">
+                        <div style="display: flex; gap: 20px; align-items: flex-start; justify-content: center;">
                             ${relations.siblings.length > 0 ? `
-                                <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; align-items: flex-start;">
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; align-items: flex-start;">
                                     ${relations.siblings.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
                                 </div>
                             ` : ''}
                             <div class="person-with-connector">
                                 ${hasParents ? '<div class="connector-to-parents"></div>' : ''}
-                                <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap; justify-content: center;">
-                                    ${createPersonCard(centerMember, null, true)}
+                                ${createPersonCard(centerMember, null, true)}
+                            </div>
+                            ${relations.spouse.length > 0 ? `
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-start; align-items: flex-start;">
                                     ${relations.spouse.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
                                 </div>
-                            </div>
+                            ` : ''}
                         </div>
                     </div>
                 </div>
