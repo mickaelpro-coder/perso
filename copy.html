@@ -327,9 +327,13 @@
                         minute: '2-digit'
                     });
 
+                    const displayText = item.text.length > 50
+                        ? item.text.substring(0, 50) + '...'
+                        : item.text;
+
                     div.innerHTML = `
                         <div class="history-text">
-                            ${escapeHtml(item.text)}
+                            ${escapeHtml(displayText)}
                             <div class="history-date">${formattedDate}</div>
                         </div>
                         <button class="btn-copy" onclick="copyText(this, '${escapeForJs(item.text)}')">
