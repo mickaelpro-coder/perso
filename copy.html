@@ -296,6 +296,9 @@
                     return;
                 }
 
+                // Tri du plus récent au plus ancien
+                data.sort((a, b) => new Date(b.created) - new Date(a.created));
+
                 container.innerHTML = '<div class="history-list"></div>';
                 const list = container.querySelector('.history-list');
 
