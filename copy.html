@@ -13,161 +13,156 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f7fa;
             min-height: 100vh;
-            padding: 20px;
+            padding: 40px 20px;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 700px;
             margin: 0 auto;
         }
 
         h1 {
             text-align: center;
-            color: white;
+            color: #1a1a2e;
             margin-bottom: 30px;
-            font-size: 2rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-size: 1.75rem;
+            font-weight: 600;
         }
 
         .section {
             background: white;
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border: 3px dashed #a29bfe;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border: 1px solid #e1e5eb;
         }
 
         .section-title {
-            font-size: 1.2rem;
-            color: #6c5ce7;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
         }
 
         /* Input Section */
         .input-area {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
 
         textarea {
             width: 100%;
-            min-height: 120px;
-            padding: 15px;
-            border: 2px solid #dfe6e9;
-            border-radius: 12px;
-            font-size: 1rem;
+            min-height: 100px;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.95rem;
             font-family: inherit;
             resize: vertical;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         textarea:focus {
             outline: none;
-            border-color: #6c5ce7;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .btn-save {
-            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            background: #3b82f6;
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
-            font-size: 1.1rem;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: background 0.2s;
             align-self: flex-end;
         }
 
         .btn-save:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,184,148,0.4);
+            background: #2563eb;
         }
 
         .btn-save:disabled {
-            background: #b2bec3;
+            background: #9ca3af;
             cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
         }
 
         /* History Section */
         .history-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
         }
 
         .history-item {
             display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            padding: 15px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 12px;
-            border: 2px solid #dfe6e9;
-            transition: all 0.3s ease;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            transition: background 0.2s;
         }
 
         .history-item:hover {
-            border-color: #a29bfe;
-            transform: translateX(5px);
+            background: #f3f4f6;
         }
 
         .history-text {
             flex: 1;
             word-break: break-word;
-            color: #2d3436;
-            line-height: 1.5;
+            color: #374151;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
         }
 
         .btn-copy {
-            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+            background: #10b981;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: background 0.2s;
             white-space: nowrap;
             flex-shrink: 0;
         }
 
         .btn-copy:hover {
-            transform: scale(1.05);
-            box-shadow: 0 3px 10px rgba(232,67,147,0.4);
+            background: #059669;
         }
 
         .btn-copy.copied {
-            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            background: #6b7280;
         }
 
         /* Empty state */
         .empty-state {
             text-align: center;
-            padding: 40px;
-            color: #636e72;
-        }
-
-        .empty-state span {
-            font-size: 3rem;
-            display: block;
-            margin-bottom: 15px;
+            padding: 40px 20px;
+            color: #9ca3af;
+            font-size: 0.9rem;
         }
 
         /* Loading */
         .loading {
             text-align: center;
             padding: 30px;
-            color: #6c5ce7;
+            color: #6b7280;
         }
 
         .loading span {
@@ -185,20 +180,22 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            padding: 15px 25px;
-            border-radius: 12px;
+            padding: 12px 20px;
+            border-radius: 6px;
             color: white;
+            font-size: 0.9rem;
             font-weight: 500;
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.2s ease;
             z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
         .message.success {
-            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            background: #10b981;
         }
 
         .message.error {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            background: #ef4444;
         }
 
         @keyframes fadeIn {
@@ -209,20 +206,21 @@
         /* Responsive */
         @media (max-width: 600px) {
             body {
-                padding: 10px;
+                padding: 20px 10px;
             }
 
             h1 {
-                font-size: 1.5rem;
+                font-size: 1.4rem;
             }
 
             .section {
-                padding: 15px;
+                padding: 16px;
             }
 
             .history-item {
                 flex-direction: column;
-                gap: 10px;
+                align-items: stretch;
+                gap: 8px;
             }
 
             .btn-copy {
@@ -233,13 +231,11 @@
 </head>
 <body>
     <div class="container">
-        <h1>Historique Copier-Coller</h1>
+        <h1>Presse-papiers</h1>
 
         <!-- Input Section -->
         <div class="section">
-            <div class="section-title">
-                <span>Nouveau texte</span>
-            </div>
+            <div class="section-title">Ajouter</div>
             <div class="input-area">
                 <textarea id="textInput" placeholder="Collez votre texte ici..."></textarea>
                 <button class="btn-save" id="saveBtn" onclick="saveText()">
@@ -250,13 +246,9 @@
 
         <!-- History Section -->
         <div class="section">
-            <div class="section-title">
-                <span>10 derniers enregistrements</span>
-            </div>
+            <div class="section-title">Historique</div>
             <div id="historyContainer">
-                <div class="loading">
-                    <span>⏳</span> Chargement...
-                </div>
+                <div class="loading">Chargement...</div>
             </div>
         </div>
     </div>
@@ -298,8 +290,7 @@
                 if (!data || data.length === 0) {
                     container.innerHTML = `
                         <div class="empty-state">
-                            <span>📋</span>
-                            Aucun enregistrement pour le moment
+                            Aucun enregistrement
                         </div>
                     `;
                     return;
@@ -334,7 +325,6 @@
                 console.error('Error loading history:', error);
                 container.innerHTML = `
                     <div class="empty-state">
-                        <span>⚠️</span>
                         Erreur de chargement
                     </div>
                 `;
