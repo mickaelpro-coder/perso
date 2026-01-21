@@ -369,6 +369,7 @@
                 const { error } = await supabaseClient
                     .from('paperweight')
                     .insert([{
+                        id: crypto.randomUUID(),
                         text: text,
                         created: new Date().toISOString()
                     }]);
