@@ -1,11 +1,3 @@
-<?php
-// Définition des données du tableau dans une variable PHP
-$tableauDonnees = [
-    ['nom' => 'Collection de pièce', 'url' => 'https://coins-lyart.vercel.app/home.html'],
-    ['nom' => 'Généalogie', 'url' => 'https://perso-pi.vercel.app/genealogie.html'],
-    ['nom' => 'Copier Coller', 'url' => 'https://perso-pi.vercel.app/copy.html']
-];
-?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -69,12 +61,18 @@ $tableauDonnees = [
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($tableauDonnees as $ligne) { ?>
             <tr>
-                <td><?php echo htmlspecialchars($ligne['nom']); ?></td>
-                <td><a href="<?php echo htmlspecialchars($ligne['url']); ?>" target="_blank"><?php echo htmlspecialchars($ligne['url']); ?></a></td>
+                <td>Collection de pièce</td>
+                <td><a href="https://coins-lyart.vercel.app/home.html" target="_blank">https://coins-lyart.vercel.app/home.html</a></td>
             </tr>
-            <?php } ?>
+            <tr>
+                <td>Généalogie</td>
+                <td><a href="https://perso-pi.vercel.app/genealogie.html" target="_blank">https://perso-pi.vercel.app/genealogie.html</a></td>
+            </tr>
+            <tr>
+                <td>Copier Coller</td>
+                <td><a href="https://perso-pi.vercel.app/copy.html" target="_blank">https://perso-pi.vercel.app/copy.html</a></td>
+            </tr>
         </tbody>
     </table>
 </body>
