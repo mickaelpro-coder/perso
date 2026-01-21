@@ -1495,6 +1495,80 @@
             background: #27ae60;
             border-radius: 6px;
         }
+
+        /* Connexion parents-enfant centrée */
+        .parents-centered {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .parents-couple {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .parents-couple::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: calc(50% - 30px);
+            width: 60px;
+            height: 2px;
+            background: #e84393;
+        }
+
+        .parent-to-child-connector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+        }
+
+        .parent-to-child-connector .vertical-connector {
+            width: 3px;
+            height: 25px;
+            background: linear-gradient(180deg, #e84393 0%, #fd79a8 100%);
+        }
+
+        .parent-to-child-connector .horizontal-connector {
+            display: none;
+        }
+
+        /* Quand il y a 2 parents, ligne en T inversé */
+        .parents-couple.has-both + .parent-to-child-connector .vertical-connector {
+            height: 25px;
+        }
+
+        body.professional .parents-couple::after {
+            background: #e67e22;
+        }
+
+        body.professional .parent-to-child-connector .vertical-connector {
+            background: #e67e22;
+        }
+
+        /* Connecteur de la personne vers les parents */
+        .person-with-connector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .connector-to-parents {
+            width: 3px;
+            height: 20px;
+            background: linear-gradient(180deg, #fd79a8 0%, #e84393 100%);
+            margin-bottom: 5px;
+        }
+
+        body.professional .connector-to-parents {
+            background: #e67e22;
+        }
     </style>
 </head>
 <body>
@@ -2605,53 +2679,63 @@
                 `;
             }
 
-            // Génération 2: Parents + Oncles/Tantes (seulement s'il y en a)
+            // Génération 2: Parents centrés + Oncles/Tantes sur les côtés
             if (relations.parents.length > 0 || relations.unclesAunts.length > 0) {
-                const hasFatherGroup = relations.father && relations.fatherSideUnclesAunts.length > 0;
-                const hasMotherGroup = relations.mother && relations.motherSideUnclesAunts.length > 0;
+                const hasUnclesAunts = relations.unclesAunts.length > 0;
+                const hasBothParents = relations.father && relations.mother;
 
                 html += `
                     <div class="tree-level-wrapper">
                         <div class="generation-header">
-                            <span class="gen-emoji">👨👩</span>Parents${relations.unclesAunts.length > 0 ? ' & Oncles/Tantes' : ''}
+                            <span class="gen-emoji">👨👩</span>Parents${hasUnclesAunts ? ' & Oncles/Tantes' : ''}
                         </div>
                         <div class="tree-level">
-                            <div class="parents-row">
-                                ${relations.father ? `
-                                    <div class="sibling-group${!hasFatherGroup ? ' no-siblings' : ''}">
+                            <div style="display: flex; align-items: flex-start; justify-content: center; gap: 30px;">
+                                ${relations.fatherSideUnclesAunts.length > 0 ? `
+                                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                                         ${relations.fatherSideUnclesAunts.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
-                                        ${createPersonCard(relations.father, 'Père')}
                                     </div>
                                 ` : ''}
-                                ${relations.mother ? `
-                                    <div class="sibling-group${!hasMotherGroup ? ' no-siblings' : ''}">
-                                        ${createPersonCard(relations.mother, 'Mère')}
+                                <div class="parents-centered">
+                                    <div class="parents-couple${hasBothParents ? ' has-both' : ''}">
+                                        ${relations.father ? createPersonCard(relations.father, 'Père') : ''}
+                                        ${relations.mother ? createPersonCard(relations.mother, 'Mère') : ''}
+                                    </div>
+                                    <div class="parent-to-child-connector">
+                                        <div class="vertical-connector"></div>
+                                    </div>
+                                </div>
+                                ${relations.motherSideUnclesAunts.length > 0 ? `
+                                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                                         ${relations.motherSideUnclesAunts.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
                                     </div>
                                 ` : ''}
                             </div>
                         </div>
                     </div>
-                    <div class="vertical-line"></div>
                 `;
             }
 
             // Génération 3: Moi + Conjoint + Frères/Sœurs (toujours affiché)
+            const hasParents = relations.parents.length > 0;
             html += `
                 <div class="tree-level-wrapper">
                     <div class="generation-header" style="background: linear-gradient(135deg, #e84393 0%, #fd79a8 100%);">
                         <span class="gen-emoji">⭐</span>${centerMember.prenom}
                     </div>
                     <div class="tree-level">
-                        <div class="tree-row single" style="gap: 30px;">
+                        <div style="display: flex; gap: 30px; align-items: flex-start; justify-content: center;">
                             ${relations.siblings.length > 0 ? `
-                                <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+                                <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; align-items: flex-start;">
                                     ${relations.siblings.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
                                 </div>
                             ` : ''}
-                            <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap; justify-content: center;">
-                                ${createPersonCard(centerMember, null, true)}
-                                ${relations.spouse.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
+                            <div class="person-with-connector">
+                                ${hasParents ? '<div class="connector-to-parents"></div>' : ''}
+                                <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap; justify-content: center;">
+                                    ${createPersonCard(centerMember, null, true)}
+                                    ${relations.spouse.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
+                                </div>
                             </div>
                         </div>
                     </div>
