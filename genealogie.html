@@ -3092,40 +3092,44 @@
                 `;
             }
 
-            // Génération 3: Moi (centré) + Frères/Sœurs à gauche + Conjoint à droite avec trait
+            // Génération 3: Moi + Frères/Sœurs reliés par un trait + Conjoint
             const hasParents = relations.parents.length > 0;
             const hasSpouse = relations.spouse.length > 0;
+            const hasSiblings = relations.siblings.length > 0;
             html += `
                 <div class="tree-level-wrapper">
                     <div class="generation-header" style="background: linear-gradient(135deg, #e84393 0%, #fd79a8 100%);">
                         <span class="gen-emoji">⭐</span>${centerMember.prenom}
                     </div>
                     <div class="tree-level">
-                        <div style="display: flex; gap: 20px; align-items: flex-start; justify-content: center;">
-                            ${relations.siblings.length > 0 ? `
-                                <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; align-items: flex-start;">
-                                    ${relations.siblings.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
-                                </div>
-                            ` : ''}
-                            <div class="couple-container">
-                                <div class="couple-row">
+                        <div style="display: flex; gap: 30px; align-items: flex-end; justify-content: center;">
+                            <div class="sibling-group-container">
+                                ${hasSiblings ? `
+                                    <div class="sibling-group-row">
+                                        ${relations.siblings.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
+                                        <div class="person-with-connector">
+                                            ${hasParents ? '<div class="connector-to-parents"></div>' : ''}
+                                            ${createPersonCard(centerMember, null, true)}
+                                        </div>
+                                    </div>
+                                ` : `
                                     <div class="person-with-connector">
                                         ${hasParents ? '<div class="connector-to-parents"></div>' : ''}
                                         ${createPersonCard(centerMember, null, true)}
                                     </div>
-                                    ${hasSpouse ? `
-                                        <div style="display: flex; gap: 10px; align-items: flex-end; padding-top: ${hasParents ? '25px' : '0'};">
-                                            ${relations.spouse.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
-                                        </div>
-                                    ` : ''}
-                                </div>
-                                ${hasSpouse ? `
-                                    <div class="couple-link-bottom">
-                                        <span class="heart">💕</span>
-                                    </div>
-                                ` : ''}
+                                `}
                             </div>
+                            ${hasSpouse ? `
+                                <div style="display: flex; gap: 10px; align-items: flex-end;">
+                                    ${relations.spouse.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
+                                </div>
+                            ` : ''}
                         </div>
+                        ${hasSpouse ? `
+                            <div class="couple-link-bottom" style="margin-top: 8px;">
+                                <span class="heart">💕</span>
+                            </div>
+                        ` : ''}
                     </div>
                 </div>
             `;
