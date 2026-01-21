@@ -1578,7 +1578,7 @@
 
         .couple-row {
             display: flex;
-            gap: 0;
+            gap: 15px;
             align-items: flex-end;
             position: relative;
         }
@@ -1587,32 +1587,37 @@
             z-index: 2;
         }
 
-        .spouse-with-link {
+        .couple-link-bottom {
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
+            justify-content: center;
             position: relative;
+            width: 100%;
+            margin-top: 5px;
+            padding-top: 5px;
         }
 
-        .couple-link-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 8px;
-        }
-
-        .couple-link-line {
+        .couple-link-bottom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 25%;
+            right: 25%;
             height: 3px;
             background: linear-gradient(90deg, #e84393 0%, #fd79a8 50%, #e84393 100%);
             border-radius: 2px;
         }
 
-        .couple-link-heart {
-            font-size: 0.8em;
-            margin-top: 2px;
+        .couple-link-bottom .heart {
+            position: relative;
+            top: -2px;
+            font-size: 0.9em;
+            background: white;
+            padding: 0 5px;
+            z-index: 1;
         }
 
-        body.professional .couple-link-line {
+        body.professional .couple-link-bottom::before {
             background: #e67e22;
         }
 
@@ -3031,9 +3036,8 @@
                                     ` : ''}
                                 </div>
                                 ${hasSpouse ? `
-                                    <div class="couple-link-wrapper">
-                                        <div class="couple-link-line" style="width: calc(100% - 20px);"></div>
-                                        <div class="couple-link-heart">💕</div>
+                                    <div class="couple-link-bottom">
+                                        <span class="heart">💕</span>
                                     </div>
                                 ` : ''}
                             </div>
