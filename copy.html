@@ -14,9 +14,10 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: #f5f7fa;
+            background: #0f0f0f;
             min-height: 100vh;
             padding: 40px 20px;
+            color: #e5e5e5;
         }
 
         .container {
@@ -26,25 +27,25 @@
 
         h1 {
             text-align: center;
-            color: #1a1a2e;
+            color: #ffffff;
             margin-bottom: 30px;
             font-size: 1.75rem;
             font-weight: 600;
         }
 
         .section {
-            background: white;
+            background: #1a1a1a;
             border-radius: 8px;
             padding: 24px;
             margin-bottom: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-            border: 1px solid #e1e5eb;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            border: 1px solid #2a2a2a;
         }
 
         .section-title {
             font-size: 0.875rem;
             font-weight: 600;
-            color: #6b7280;
+            color: #888888;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 16px;
@@ -61,18 +62,24 @@
             width: 100%;
             min-height: 100px;
             padding: 12px;
-            border: 1px solid #d1d5db;
+            border: 1px solid #333333;
             border-radius: 6px;
             font-size: 0.95rem;
             font-family: inherit;
             resize: vertical;
             transition: border-color 0.2s, box-shadow 0.2s;
+            background: #252525;
+            color: #e5e5e5;
+        }
+
+        textarea::placeholder {
+            color: #666666;
         }
 
         textarea:focus {
             outline: none;
             border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
 
         .btn-save {
@@ -93,7 +100,7 @@
         }
 
         .btn-save:disabled {
-            background: #9ca3af;
+            background: #4a4a4a;
             cursor: not-allowed;
         }
 
@@ -109,20 +116,20 @@
             align-items: center;
             gap: 12px;
             padding: 12px;
-            background: #f9fafb;
+            background: #252525;
             border-radius: 6px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #333333;
             transition: background 0.2s;
         }
 
         .history-item:hover {
-            background: #f3f4f6;
+            background: #2a2a2a;
         }
 
         .history-text {
             flex: 1;
             word-break: break-word;
-            color: #374151;
+            color: #d1d1d1;
             font-size: 0.9rem;
             line-height: 1.4;
             font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
@@ -147,14 +154,14 @@
         }
 
         .btn-copy.copied {
-            background: #6b7280;
+            background: #4a4a4a;
         }
 
         /* Empty state */
         .empty-state {
             text-align: center;
             padding: 40px 20px;
-            color: #9ca3af;
+            color: #666666;
             font-size: 0.9rem;
         }
 
@@ -162,17 +169,7 @@
         .loading {
             text-align: center;
             padding: 30px;
-            color: #6b7280;
-        }
-
-        .loading span {
-            display: inline-block;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            color: #666666;
         }
 
         /* Message toast */
@@ -187,7 +184,7 @@
             font-weight: 500;
             animation: fadeIn 0.2s ease;
             z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
 
         .message.success {
