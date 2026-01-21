@@ -368,9 +368,15 @@
             try {
                 const { error } = await supabaseClient
                     .from('paperweight')
-                    .insert([{ text: text }]);
+                    .insert([{
+                        text: text,
+                        created: new Date().toISOString()
+                    }]);
 
-                if (error) throw error;
+                if (error) {
+                    console.error('Supabase error:', error);
+                    throw error;
+                }
 
                 showMessage('Texte enregistré !');
                 input.value = '';
@@ -378,7 +384,8 @@
 
             } catch (error) {
                 console.error('Error saving:', error);
-                showMessage('Erreur lors de l\'enregistrement', 'error');
+                const errorMsg = error.message || error.details || 'Erreur inconnue';
+                showMessage(`Erreur: ${errorMsg}`, 'error');
             } finally {
                 btn.disabled = false;
                 btn.textContent = 'Enregistrer';
