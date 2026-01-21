@@ -1569,6 +1569,61 @@
         body.professional .connector-to-parents {
             background: #e67e22;
         }
+
+        /* Connexion personne-conjoint */
+        .couple-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .couple-row {
+            display: flex;
+            gap: 0;
+            align-items: flex-end;
+            position: relative;
+        }
+
+        .couple-row .person-with-connector {
+            z-index: 2;
+        }
+
+        .spouse-with-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .couple-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 5px;
+        }
+
+        .couple-link-line {
+            height: 3px;
+            background: linear-gradient(90deg, #e84393 0%, #fd79a8 50%, #e84393 100%);
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .couple-link-heart {
+            position: absolute;
+            bottom: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8em;
+            z-index: 3;
+        }
+
+        body.professional .couple-link-line {
+            background: #e67e22;
+        }
     </style>
 </head>
 <body>
@@ -2716,8 +2771,9 @@
                 `;
             }
 
-            // Génération 3: Moi (centré) + Frères/Sœurs à gauche + Conjoint à droite
+            // Génération 3: Moi (centré) + Frères/Sœurs à gauche + Conjoint à droite avec trait
             const hasParents = relations.parents.length > 0;
+            const hasSpouse = relations.spouse.length > 0;
             html += `
                 <div class="tree-level-wrapper">
                     <div class="generation-header" style="background: linear-gradient(135deg, #e84393 0%, #fd79a8 100%);">
@@ -2730,15 +2786,23 @@
                                     ${relations.siblings.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
                                 </div>
                             ` : ''}
-                            <div class="person-with-connector">
-                                ${hasParents ? '<div class="connector-to-parents"></div>' : ''}
-                                ${createPersonCard(centerMember, null, true)}
-                            </div>
-                            ${relations.spouse.length > 0 ? `
-                                <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-start; align-items: flex-start;">
-                                    ${relations.spouse.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
+                            <div class="couple-container">
+                                <div class="couple-row">
+                                    <div class="person-with-connector">
+                                        ${hasParents ? '<div class="connector-to-parents"></div>' : ''}
+                                        ${createPersonCard(centerMember, null, true)}
+                                    </div>
+                                    ${hasSpouse ? `
+                                        <div style="display: flex; gap: 10px; align-items: flex-end; padding-top: ${hasParents ? '25px' : '0'};">
+                                            ${relations.spouse.map(m => createPersonCard(m.member, relationLabels[m.type])).join('')}
+                                        </div>
+                                    ` : ''}
                                 </div>
-                            ` : ''}
+                                ${hasSpouse ? `
+                                    <div class="couple-link-line" style="width: ${60 + (relations.spouse.length * 50)}px; position: relative; margin-top: 8px;"></div>
+                                    <div class="couple-link-heart" style="position: relative; margin-top: -5px;">💕</div>
+                                ` : ''}
+                            </div>
                         </div>
                     </div>
                 </div>
